@@ -1,0 +1,65 @@
+# .github/workflows/ci.yml
+# =========================
+# CI pipeline: runs on every PR to main
+# Checks: pytest, ruff lint, mypy type checking
+#
+# Owner: Hung
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Test & Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          # Install core deps only (skip heavy advanced deps for CI speed)
+          pip install \
+            requests beautifulsoup4 lxml pandas numpy matplotlib openpyxl \
+            fastapi uvicorn pydantic pydantic-settings httpx python-multipart \
+            streamlit plotly \
+            pytest pytest-cov \
+            ruff mypy types-requests
+
+      - name: Lint with ruff
+        run: ruff check . --output-format=github
+
+      - name: Type check with mypy
+        run: mypy shared/ pipeline/ --ignore-missing-imports
+        continue-on-error: true   
+
+      - name: Run tests
+        run: |
+          pytest tests/ \
+            -v \
+            --tb=short \
+            --cov=pipeline \
+            --cov=api \
+            --cov=shared \
+            --cov-report=term-missing \
+            --cov-report=xml
+
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v4
+        if: always()
+        with:
+          file: ./coverage.xml
+          fail_ci_if_error: false
