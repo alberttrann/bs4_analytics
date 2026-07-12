@@ -11,7 +11,7 @@ from api.services.data_service import load_links
 from shared.schemas import LinkModel
 
 # Khởi tạo router
-router = APIRouter(prefix="/links", tags=["Links"])
+router = APIRouter(tags=["Links"])
 
 @router.get("", response_model=list[LinkModel])
 def get_all_links(
