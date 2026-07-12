@@ -43,6 +43,8 @@ def run_extraction():
     for a_tag in soup.find_all("a"):
         href = a_tag.get("href")
         link_type = classify_link(href)
+
+        link_text = a_tag.get_text(strip=True)
         
         # Logic đi ngược lên tìm heading gần nhất phía trên thẻ <a>
         nearest_heading_tag = a_tag.find_previous(heading_tags_list)
@@ -51,7 +53,8 @@ def run_extraction():
         links_data.append({
             "href": href,
             "link_type": link_type,
-            "section": nearest_heading
+            "link_text": link_text,
+            "section_title": nearest_heading
         })
 
     df_links = pd.DataFrame(links_data)
