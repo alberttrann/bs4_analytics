@@ -2,7 +2,7 @@
 
 > **Project type:** Final Project - Python Data Engineering & Analytics Pipeline  
 > **Target source:** https://www.crummy.com/software/BeautifulSoup/bs4/doc/  
-> **Stack:** Python 3.11–3.13 · FastAPI · Streamlit · BeautifulSoup4 · Pandas · NumPy · Matplotlib · scikit-learn · spaCy
+> **Stack:** Python 3.11–3.13 · FastAPI · Streamlit · BeautifulSoup4 · Pandas · NumPy · Matplotlib · scikit-learn · nltk
 
 ---
 
@@ -38,7 +38,7 @@ This system is an **end-to-end data engineering and analytics pipeline** that au
 6. **Generates** a Markdown analytical report and a 5-sheet Excel workbook
 7. **Serves** all processed data through a FastAPI REST API with 7 route prefixes and 20+ endpoints
 8. **Presents** all findings through an interactive 7-page Streamlit web dashboard
-9. **Applies** advanced NLP techniques: TF-IDF keyword ranking, Flesch-Kincaid readability scoring, cosine similarity between sections, and spaCy Named Entity Recognition
+9. **Applies** advanced NLP techniques: TF-IDF keyword ranking, Flesch-Kincaid readability scoring, cosine similarity between sections, and nltk for rich stopwords set
 
 The project was designed to demonstrate modular, production-grade data pipeline architecture where each stage is independently runnable, testable, and maintainable.
 
@@ -150,7 +150,7 @@ bs4_analytics/
 │   ├── reporter.py                 # F8: Markdown report + Excel workbook
 │   ├── pipeline.py                 # Orchestrator: runs all stages in order
 │   └── advanced/
-│       ├── nlp_analyzer.py         # TF-IDF ranking, Flesch readability, spaCy NER
+│       ├── nlp_analyzer.py         # TF-IDF ranking, Flesch readability, nltk
 │       ├── similarity.py           # Cosine similarity matrix between sections
 │       └── graph_builder.py        # networkx section-link graph → D3 JSON
 │
@@ -513,10 +513,6 @@ Uses `networkx.DiGraph` to build a directed graph where nodes are sections and e
 
 The graph is exported as D3-compatible `{nodes, edges}` JSON served by `GET /graph` and visualised in Streamlit using `pyvis`.
 
-### 8.5 spaCy NER (`nlp_analyzer.py`)
-
-`extract_entities()` runs `en_core_web_sm` over each section's text and returns a DataFrame of named entities (text, label). Intended to identify class names, function names, and technical terms that spaCy recognises as entities (ORG, PRODUCT). Not currently wired into the main report due to the limitations of generic NER on technical documentation.
-
 ---
 
 ## 9. REST API Reference
@@ -751,7 +747,7 @@ streamlit>=1.36, plotly>=5.22
 # Advanced NLP
 scikit-learn>=1.5    # TF-IDF, cosine similarity
 textstat>=0.7        # Flesch readability
-spacy>=3.8           # NER (3.8.x has Python 3.13 wheels)
+nltk>=3.8.0
 networkx>=3.3        # section-link graph
 pyvis>=0.3.2         # interactive network graph
 wordcloud>=1.9.6     # keyword wordcloud
@@ -766,7 +762,6 @@ pytest>=8.2, pytest-cov>=5.0, ruff>=0.5
 
 **Python 3.13 compatibility notes:**
 - `numpy>=2.0` - 2.x has pre-built Windows wheels for 3.13; `<2.0` caused pip to attempt source builds
-- `spacy>=3.8` - 3.7.x has no 3.13 wheels; 3.8.14 ships `cp313-cp313-win_amd64.whl`
 - `wordcloud>=1.9.6` - has 3.13 wheels; `streamlit-wordcloud` (a different package) does not
 - `asyncio.subprocess.__all__` - may be missing in some 3.13 installations due to stdlib corruption; the symptom is Streamlit failing to import asyncio
 
@@ -794,7 +789,6 @@ python -m venv .venv
 
 # 3. Install dependencies
 pip install -r requirements.txt
-python -m spacy download en_core_web_sm
 
 # 4. Environment
 copy .env.example .env        # Windows
