@@ -25,9 +25,9 @@ def compute_similarity_matrix(sections: pd.DataFrame) -> np.ndarray:
     """
     from sklearn.feature_extraction.text import TfidfVectorizer
     from sklearn.metrics.pairwise import cosine_similarity
-
+    from shared.constants import STOPWORDS
     texts  = sections["section_text"].fillna("").tolist()
-    vec    = TfidfVectorizer(stop_words="english")
+    vec   = TfidfVectorizer(stop_words=list(STOPWORDS), max_features=500)
     X      = vec.fit_transform(texts)
     matrix = cosine_similarity(X)
     logger.info("Computed %dx%d similarity matrix", *matrix.shape)

@@ -22,9 +22,9 @@ def compute_tfidf_keywords(sections: pd.DataFrame, top_n: int = 20) -> list[dict
     Returns list of {"keyword": str, "count": float} sorted descending.
     """
     from sklearn.feature_extraction.text import TfidfVectorizer
-
+    from shared.constants import STOPWORDS
     texts = sections["section_text"].fillna("").tolist()
-    vec   = TfidfVectorizer(stop_words="english", max_features=500)
+    vec   = TfidfVectorizer(stop_words=list(STOPWORDS), max_features=500)
     X     = vec.fit_transform(texts)
     scores = X.toarray().sum(axis=0)
     terms  = vec.get_feature_names_out()
