@@ -1,6 +1,6 @@
 # Pipeline outputs
-data/
-output/
+#data/
+#output/
 
 # Python
 __pycache__/
@@ -62,4 +62,3 @@ logs/
 
 # Ruff
 .ruff_cache/
-lib

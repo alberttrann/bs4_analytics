@@ -1,6 +1,5 @@
 """
 app/pages/5_report.py
-Owner: Hung (A)
 Download page - PDF report, Excel workbook, and individual chart PNGs.
 """
 from __future__ import annotations

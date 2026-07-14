@@ -424,75 +424,87 @@ Generates two artifacts:
 ---
 
 ## 6. Analytical Questions & Methods
-
-Results from a representative pipeline run:
-
+ 
+Results from a representative pipeline run (verified against generated charts):
+ 
 | # | Question | Result |
 |---|----------|--------|
 | Q1 | Total sections | **113** |
 | Q2 | Highest word count section | **"Searching the tree"** - 4,711 words |
 | Q3 | Most code examples section | **"Multi-valued attributes"** - 13 examples |
 | Q4 | Most links section | **"Table of Contents"** - 128 links |
-| Q5 | Top 10 keywords (raw) | soup, class, html, example, string, href, http, beautiful, document, sister |
-| Q6 | Internal anchor links | **342** (90.9%) of 376 total |
+| Q5 | Top 10 keywords (NLTK-filtered raw) | soup (926), tag (746), class (511), html (420), example (419), string (387), com (383), href (378), http (363), beautiful (351) |
+| Q6 | Link type breakdown | internal_anchor 342 (91.0%), external_link 21 (5.6%), documentation_link 11 (2.9%), empty_or_invalid 2 (0.5%), image_link 0 |
 | Q7 | find_all() examples | **41** (18.6% of 220 total) |
 | Q8 | get_text() examples | **4** (1.8%) |
 | Q9 | Average words/section | **363.28** |
 | Q10 | Sections with no code | **22** |
-| ADV | Mean Flesch readability | **55.99** (Standard band: 50–60) |
-
+| ADV | Mean Flesch readability | **56.0** (Standard band: 50–60) |
+| ADV | TF-IDF top term | `tag` (13.30), narrowly above `soup` (13.26) |
+| ADV | Most similar pair | "Low-level search interface" ↔ "Custom element filtering" |
+ 
 ---
-
+ 
 ## 7. Visualizations
-
+ 
 ### Required (F7)
-
-**Chart 1 - Top Sections by Word Count** (`word_count_by_section.png`)  
-Horizontal bar chart, top 10 sections. Reveals the extreme depth asymmetry: "Searching the tree" at 4,711 words is more than double the second-longest section.
-
-**Chart 2 - Code Examples by Section** (`code_examples_by_section.png`)  
-Vertical bar chart, top 10 sections. Shows "Multi-valued attributes" as the densest example-driven section, reflecting how the concept requires repeated demonstration.
-
-**Chart 3 - Link Type Distribution** (`link_type_distribution.png`)  
-Pie chart. The 90.9% internal anchor dominance visually confirms that the documentation is highly self-referential - it cross-references itself far more than it links outward.
-
-**Chart 4 - Code Example Line Count Distribution** (`code_linecount_hist.png`)  
-Right-skewed histogram (mean 5.7, median 4.0). The right tail reaching 35 lines reveals that while most examples are concise, some demonstrate complex multi-step operations.
-
+ 
+**Chart 1 - Top Sections by Word Count** (`word_count_by_section.png`)
+ 
+Horizontal bar chart of the top 10 sections by word count, sorted descending, with value labels on each bar. "Searching the tree" leads at 4,711 words - more than twice "Navigating the tree" (2,104) and nearly 13× the overall median section length. The top 3 sections (Searching the tree, Navigating the tree, find_all()) collectively contain the majority of the documentation's technical prose. Even the 10th-ranked section ("CSS selectors through the.cssproperty" at 1,055 words) is nearly 3× the mean, confirming the depth asymmetry is not a single outlier but a structural pattern across the most important topics.
+ 
+**Chart 2 - Code Examples by Section** (`code_examples_by_section.png`)
+ 
+Vertical bar chart of the top 10 sections by code example count. "Multi-valued attributes" leads with 13 examples, followed by "CSS selectors through the.cssproperty" (12). Neither section appears in the top 10 by word count - example density and prose depth are independent dimensions. "The keyword arguments" (9), "Output formatters" (8), and "Searching by CSS class" (7) round out the top 5. Six sections tie at 5–6 examples. The code-dense sections are predominantly API-reference sections covering specific argument types, attribute matching, and CSS selector syntax - concepts that require repeated worked examples rather than extended explanation.
+ 
+**Chart 3 - Link Type Distribution** (`link_type_distribution.png`)
+ 
+Pie chart with 4 visible wedges (image_link is absent - 0 detected at scrape time). `internal_anchor` dominates at 91.0% (342 of 376 total links). `external_link` accounts for 5.6% (21), `documentation_link` for 2.9% (11 links to other crummy.com pages), and `empty_or_invalid` for 0.5% (2). The near-total internal-anchor dominance means the documentation operates as a closed reference system: users are guided between sections of the same page rather than outward to external resources.
+ 
+**Chart 4 - Code Example Line Count Distribution** (`code_linecount_hist.png`)
+ 
+Right-skewed histogram (n=220, mean=5.7, median=4.0, max=35, std=4.6). The modal bin is 3–4 lines (~63 examples at the peak), and most examples fall in the 1–6 line range. The mean–median gap of 1.7 lines confirms the rightward skew. A secondary mode around 8–10 lines represents intermediate examples. The long tail extends to 35 lines for the most complex multi-step demonstrations. The distribution reflects a deliberate pedagogical choice: BeautifulSoup's documentation favors short, self-contained code snippets over comprehensive program listings.
+ 
 ### Advanced
-
-**Chart 5 - TF-IDF vs Raw Frequency** (`tfidf_keywords.png`)  
-Side-by-side comparison. Raw frequency ranks `soup` first (926 occurrences); TF-IDF surfaces `tag` (13.30) above `soup` (13.26). `soup` appears in nearly every section as boilerplate variable name; `tag` is the conceptually distinctive object.
-
-**Chart 6 - Readability by Section** (`readability_by_section.png`)  
-Color-coded horizontal bars (green >70, blue 50–70, red <50). Shows which sections are introductory-accessible vs. advanced-dense. Mean 55.99 places the documentation in the standard technical writing range.
-
-**Chart 7 - Section Similarity Heatmap** (`similarity_heatmap.png`)  
-Imshow heatmap of cosine similarity between the 30 most content-rich sections. Bright cells identify conceptually overlapping sections. The pair "Low-level search interface" ↔ "Custom element filtering" scores 0.977 - nearly identical content.
-
-**Chart 8 - Method Usage** (`method_usage.png`)  
-Grouped bar showing both absolute count and percentage for all 5 detected methods. `find_all()` at 18.6% vs `get_text()` at 1.8% quantifies the library's search-first orientation.
-
+ 
+**Chart 5 - TF-IDF vs Raw Frequency** (`tfidf_keywords.png`)
+ 
+Side-by-side horizontal bar chart. Raw frequency top 10: soup (926) → tag (746) → class (511) → html (420) → example (419) → string (387) → com (383) → href (378) → http (363) → beautiful (351). TF-IDF top 10: tag (13.30) → soup (13.26) → class (7.79) → html (7.47) → com (7.41) → example (7.38) → beautiful (7.23) → string (7.20) → title (6.64) → document (6.39).
+ 
+`tag` overtakes `soup` in TF-IDF despite being second in raw frequency - `soup` is the ubiquitous variable name used in almost every code block, so it carries low discriminative power across sections. `href` and `http` drop out of the TF-IDF top 10 entirely, as they appear uniformly across sections as part of example URLs. `title` and `document` enter the TF-IDF top 10 as more conceptually specific terms. Notably, `sister` - which dominated the top 10 under the previous hardcoded stopword set - is absent from both rankings after NLTK filtering, confirming that the example-data artefact has been correctly suppressed.
+ 
+**Chart 6 - Readability by Section** (`readability_by_section.png`)
+ 
+Color-coded horizontal bar chart showing the 10 easiest (green >70) and 10 hardest (red <50) sections, with mean (56.0) and standard threshold (60) as vertical reference lines. Easiest: "True" (93.6) - a very short boolean-values section; "Generators" (89.4); "A regular expression" (81.7); ".string" (81.1); "A string" (78.8). These are concise definitional sections. Hardest real content: `find_previous_siblings()…` (21.1) and `find_next_siblings()…` (26.6) - dense API reference sections with long method signatures. "Table of Contents" and "Quick search" score 0.0 due to near-absence of prose sentences (degenerate formula output). "API documentation" scores 33.5 - the section describing BeautifulSoup's public API surface uses the most complex sentence structure. The mean of 56.0 is just below the 60 standard threshold, consistent with competent but demanding technical writing.
+ 
+**Chart 7 - Section Cosine Similarity Heatmap** (`similarity_heatmap.png`)
+ 
+Imshow heatmap of cosine similarity between the top 30 sections by word count (those with the most content to compare). Diagonal is 1.0 throughout. Notable off-diagonal clusters: "Searching the tree" ↔ "find_all()" shows one of the brightest off-diagonal cells, confirming that the parent search section and its most important subsection share nearly identical vocabulary. "Beautiful Soup 3" ↔ "Porting code to BS4" forms a bright pair - the migration guide reuses BS3 terminology throughout. "Output" ↔ "Output formatters" cluster together. The heatmap reveals a block structure: navigation sections (Searching, Navigating, Going sideways, Going back and forth) form one cluster; output sections another; installation sections another. Most off-diagonal cells are light blue (low similarity), confirming that despite shared vocabulary, most section pairs cover distinct content.
+ 
+**Chart 8 - Method Usage** (`method_usage.png`)
+ 
+Grouped bar chart with dual y-axes: absolute count (blue, left) and percentage of total (green, right). find_all(): 41 (18.6%) → find(): 14 (6.4%) → select(): 14 (6.4%) → get_text(): 4 (1.8%) → requests: 0 (0.0%). `find()` and `select()` tie at exactly 14 examples each - an unexpected result showing that the CSS selector interface (`select()`) receives equal demonstration depth as the traditional traversal method (`find()`). `requests` scoring 0 is significant: the documentation assumes users bring their own HTTP layer and makes no attempt to demonstrate data fetching, focusing entirely on parsing and navigation.
+ 
 ---
-
-## 8. Advanced NLP Layer
-
+ 
+## 8. Advanced NLP Layer (scikit-learn · textstat · NLTK)
+ 
 All advanced functionality is in `pipeline/advanced/` - additive files that never modify the core pipeline outputs.
-
+ 
 ### 8.1 TF-IDF Keyword Ranking (`nlp_analyzer.py`)
-
-Uses `sklearn.feature_extraction.text.TfidfVectorizer` with `stop_words="english"` and `max_features=500`. The vectorizer transforms all section texts into a term-document matrix. Column sums give each term's total TF-IDF weight across the corpus.
-
-**Why TF-IDF over raw frequency for deeper analysis:** Raw frequency (Q5) counts total occurrences. TF-IDF weights a term by how distinctive it is across sections - a word appearing in every section gets a low score even if it appears often. This surfaces conceptually distinctive terms (`tag`, `parser`, `markup`) over boilerplate (`soup`, which is just the variable name used in every example).
-
+ 
+Uses `sklearn.feature_extraction.text.TfidfVectorizer` with `stop_words=list(STOPWORDS)` (198 NLTK English stopwords, same set used for Q5) and `max_features=500`. The vectorizer transforms all section texts into a term–document matrix. Column sums give each term's total TF-IDF weight across the corpus.
+ 
+**Why TF-IDF over raw frequency:** Raw frequency (Q5) counts total occurrences. TF-IDF weights a term by how distinctive it is to individual sections - a word appearing uniformly across all sections (like `soup`, the standard variable name) gets a low score even with high total frequency, while terms concentrated in specific sections score highly. This is confirmed by the chart: `tag` (13.30) overtakes `soup` (13.26) in TF-IDF despite being ranked second in raw frequency, and `href`/`http` drop out of the top 10 entirely as they appear uniformly across sections as URL components.
+ 
 ### 8.2 Readability Scoring (`nlp_analyzer.py`)
-
+ 
 Uses `textstat.flesch_reading_ease()` per section. The Flesch formula:
-
+ 
 ```
 Score = 206.835 - 1.015 × (words/sentences) - 84.6 × (syllables/words)
 ```
-
+ 
 Higher scores mean easier reading (0–100 scale). The mean score of 55.99 falls in the "Standard" band. Scores are computed per section, enabling comparison of introductory sections (high score, short sentences) vs. advanced sections (low score, long technical sentences).
 
 **Known limitation:** section_text includes code snippets and Python identifiers, which have unusual syllable counts. This artificially deflates readability scores. A production system would strip code blocks before scoring.

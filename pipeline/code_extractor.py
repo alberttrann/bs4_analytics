@@ -1,6 +1,5 @@
 """
 pipeline/code_extractor.py
-Owner: Hung (A)
 Feature 5 - Code Example Extractor
 
 Finds every <div class="highlight"> block in the parsed soup, extracts

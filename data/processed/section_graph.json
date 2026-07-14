@@ -1,0 +1,565 @@
+{
+  "nodes": [
+    {
+      "id": "Beautiful Soup Documentation",
+      "level": 1,
+      "word_count": 310
+    },
+    {
+      "id": "Getting help",
+      "level": 2,
+      "word_count": 97
+    },
+    {
+      "id": "API documentation",
+      "level": 3,
+      "word_count": 43
+    },
+    {
+      "id": "Quick Start",
+      "level": 1,
+      "word_count": 422
+    },
+    {
+      "id": "Installing Beautiful Soup",
+      "level": 1,
+      "word_count": 431
+    },
+    {
+      "id": "Installing a parser",
+      "level": 2,
+      "word_count": 215
+    },
+    {
+      "id": "Making the soup",
+      "level": 1,
+      "word_count": 108
+    },
+    {
+      "id": "Kinds of objects",
+      "level": 1,
+      "word_count": 1529
+    },
+    {
+      "id": "Multi-valued attributes",
+      "level": 2,
+      "word_count": 414
+    },
+    {
+      "id": "Special strings",
+      "level": 2,
+      "word_count": 362
+    },
+    {
+      "id": "For HTML documents",
+      "level": 3,
+      "word_count": 123
+    },
+    {
+      "id": "For XML documents",
+      "level": 3,
+      "word_count": 103
+    },
+    {
+      "id": "Navigating the tree",
+      "level": 1,
+      "word_count": 2104
+    },
+    {
+      "id": "Going down",
+      "level": 2,
+      "word_count": 907
+    },
+    {
+      "id": "Navigating using tag names",
+      "level": 3,
+      "word_count": 196
+    },
+    {
+      "id": ".contentsand.children",
+      "level": 3,
+      "word_count": 185
+    },
+    {
+      "id": ".descendants",
+      "level": 3,
+      "word_count": 161
+    },
+    {
+      "id": ".string",
+      "level": 3,
+      "word_count": 107
+    },
+    {
+      "id": ".stringsandstripped_strings",
+      "level": 3,
+      "word_count": 194
+    },
+    {
+      "id": "Going up",
+      "level": 2,
+      "word_count": 246
+    },
+    {
+      "id": ".parent",
+      "level": 3,
+      "word_count": 111
+    },
+    {
+      "id": ".parents",
+      "level": 3,
+      "word_count": 66
+    },
+    {
+      "id": ".self_and_parents",
+      "level": 3,
+      "word_count": 44
+    },
+    {
+      "id": "Going sideways",
+      "level": 2,
+      "word_count": 462
+    },
+    {
+      "id": ".next_siblingand.previous_sibling",
+      "level": 3,
+      "word_count": 243
+    },
+    {
+      "id": ".next_siblingsand.previous_siblings",
+      "level": 3,
+      "word_count": 126
+    },
+    {
+      "id": "Going back and forth",
+      "level": 2,
+      "word_count": 386
+    },
+    {
+      "id": ".next_elementand.previous_element",
+      "level": 3,
+      "word_count": 230
+    },
+    {
+      "id": ".next_elementsand.previous_elements",
+      "level": 3,
+      "word_count": 58
+    },
+    {
+      "id": "Searching the tree",
+      "level": 1,
+      "word_count": 4711
+    },
+    {
+      "id": "Kinds of filters",
+      "level": 2,
+      "word_count": 612
+    },
+    {
+      "id": "A string",
+      "level": 3,
+      "word_count": 73
+    },
+    {
+      "id": "A regular expression",
+      "level": 3,
+      "word_count": 103
+    },
+    {
+      "id": "True",
+      "level": 3,
+      "word_count": 60
+    },
+    {
+      "id": "A function",
+      "level": 3,
+      "word_count": 228
+    },
+    {
+      "id": "A list",
+      "level": 3,
+      "word_count": 73
+    },
+    {
+      "id": "find_all()",
+      "level": 2,
+      "word_count": 1671
+    },
+    {
+      "id": "Thenameargument",
+      "level": 3,
+      "word_count": 76
+    },
+    {
+      "id": "The keyword arguments",
+      "level": 3,
+      "word_count": 500
+    },
+    {
+      "id": "Searching by CSS class",
+      "level": 3,
+      "word_count": 381
+    },
+    {
+      "id": "Thestringargument",
+      "level": 3,
+      "word_count": 219
+    },
+    {
+      "id": "Thelimitargument",
+      "level": 3,
+      "word_count": 97
+    },
+    {
+      "id": "Therecursiveargument",
+      "level": 3,
+      "word_count": 196
+    },
+    {
+      "id": "Calling a tag is like callingfind_all()",
+      "level": 2,
+      "word_count": 71
+    },
+    {
+      "id": "find()",
+      "level": 2,
+      "word_count": 194
+    },
+    {
+      "id": "find_parents()andfind_parent()",
+      "level": 2,
+      "word_count": 347
+    },
+    {
+      "id": "find_next_siblings()andfind_next_sibling()",
+      "level": 2,
+      "word_count": 102
+    },
+    {
+      "id": "find_previous_siblings()andfind_previous_sibling()",
+      "level": 2,
+      "word_count": 111
+    },
+    {
+      "id": "find_all_next()andfind_next()",
+      "level": 2,
+      "word_count": 180
+    },
+    {
+      "id": "find_all_previous()andfind_previous()",
+      "level": 2,
+      "word_count": 177
+    },
+    {
+      "id": "CSS selectors through the.cssproperty",
+      "level": 2,
+      "word_count": 1055
+    },
+    {
+      "id": "Advanced Soup Sieve features",
+      "level": 3,
+      "word_count": 252
+    },
+    {
+      "id": "Namespaces in CSS selectors",
+      "level": 3,
+      "word_count": 129
+    },
+    {
+      "id": "History of CSS selector support",
+      "level": 3,
+      "word_count": 46
+    },
+    {
+      "id": "Modifying the tree",
+      "level": 1,
+      "word_count": 1584
+    },
+    {
+      "id": "Changing tag names and attributes",
+      "level": 2,
+      "word_count": 80
+    },
+    {
+      "id": "Modifying.string",
+      "level": 2,
+      "word_count": 68
+    },
+    {
+      "id": "append()",
+      "level": 2,
+      "word_count": 58
+    },
+    {
+      "id": "extend()",
+      "level": 2,
+      "word_count": 69
+    },
+    {
+      "id": "NavigableString()and.new_tag()",
+      "level": 2,
+      "word_count": 265
+    },
+    {
+      "id": "insert()",
+      "level": 2,
+      "word_count": 135
+    },
+    {
+      "id": "insert_before()andinsert_after()",
+      "level": 2,
+      "word_count": 121
+    },
+    {
+      "id": "clear()",
+      "level": 2,
+      "word_count": 35
+    },
+    {
+      "id": "extract()",
+      "level": 2,
+      "word_count": 130
+    },
+    {
+      "id": "decompose()",
+      "level": 2,
+      "word_count": 100
+    },
+    {
+      "id": "replace_with()",
+      "level": 2,
+      "word_count": 154
+    },
+    {
+      "id": "wrap()",
+      "level": 2,
+      "word_count": 73
+    },
+    {
+      "id": "unwrap()",
+      "level": 2,
+      "word_count": 65
+    },
+    {
+      "id": "smooth()",
+      "level": 2,
+      "word_count": 166
+    },
+    {
+      "id": "Output",
+      "level": 1,
+      "word_count": 1401
+    },
+    {
+      "id": "Pretty-printing",
+      "level": 2,
+      "word_count": 167
+    },
+    {
+      "id": "Non-pretty printing",
+      "level": 2,
+      "word_count": 74
+    },
+    {
+      "id": "Output formatters",
+      "level": 2,
+      "word_count": 878
+    },
+    {
+      "id": "Formatter objects",
+      "level": 3,
+      "word_count": 167
+    },
+    {
+      "id": "Writing your own formatter",
+      "level": 3,
+      "word_count": 233
+    },
+    {
+      "id": "get_text()",
+      "level": 2,
+      "word_count": 272
+    },
+    {
+      "id": "Specifying the parser to use",
+      "level": 1,
+      "word_count": 639
+    },
+    {
+      "id": "Differences between parsers",
+      "level": 2,
+      "word_count": 403
+    },
+    {
+      "id": "Encodings",
+      "level": 1,
+      "word_count": 1393
+    },
+    {
+      "id": "Output encoding",
+      "level": 2,
+      "word_count": 298
+    },
+    {
+      "id": "Unicode, Dammit",
+      "level": 2,
+      "word_count": 602
+    },
+    {
+      "id": "Smart quotes",
+      "level": 3,
+      "word_count": 151
+    },
+    {
+      "id": "Inconsistent encodings",
+      "level": 3,
+      "word_count": 291
+    },
+    {
+      "id": "Line numbers",
+      "level": 1,
+      "word_count": 297
+    },
+    {
+      "id": "Comparing objects for equality",
+      "level": 1,
+      "word_count": 127
+    },
+    {
+      "id": "Copying Beautiful Soup objects",
+      "level": 1,
+      "word_count": 187
+    },
+    {
+      "id": "Low-level search interface",
+      "level": 1,
+      "word_count": 720
+    },
+    {
+      "id": "Custom element filtering",
+      "level": 2,
+      "word_count": 633
+    },
+    {
+      "id": "Custom element iteration",
+      "level": 3,
+      "word_count": 298
+    },
+    {
+      "id": "Advanced parser customization",
+      "level": 1,
+      "word_count": 1144
+    },
+    {
+      "id": "Parsing only part of a document",
+      "level": 2,
+      "word_count": 546
+    },
+    {
+      "id": "Customizing multi-valued attributes",
+      "level": 2,
+      "word_count": 162
+    },
+    {
+      "id": "Handling duplicate attributes",
+      "level": 2,
+      "word_count": 224
+    },
+    {
+      "id": "Instantiating custom subclasses",
+      "level": 2,
+      "word_count": 167
+    },
+    {
+      "id": "Troubleshooting",
+      "level": 1,
+      "word_count": 1072
+    },
+    {
+      "id": "diagnose()",
+      "level": 2,
+      "word_count": 159
+    },
+    {
+      "id": "Errors when parsing a document",
+      "level": 2,
+      "word_count": 144
+    },
+    {
+      "id": "Version mismatch problems",
+      "level": 2,
+      "word_count": 127
+    },
+    {
+      "id": "Parsing XML",
+      "level": 2,
+      "word_count": 40
+    },
+    {
+      "id": "Other parser problems",
+      "level": 2,
+      "word_count": 135
+    },
+    {
+      "id": "Miscellaneous",
+      "level": 3,
+      "word_count": 191
+    },
+    {
+      "id": "Improving Performance",
+      "level": 2,
+      "word_count": 139
+    },
+    {
+      "id": "Translating this documentation",
+      "level": 1,
+      "word_count": 144
+    },
+    {
+      "id": "Beautiful Soup 3",
+      "level": 1,
+      "word_count": 890
+    },
+    {
+      "id": "Porting code to BS4",
+      "level": 2,
+      "word_count": 775
+    },
+    {
+      "id": "You need a parser",
+      "level": 3,
+      "word_count": 108
+    },
+    {
+      "id": "Property names",
+      "level": 3,
+      "word_count": 62
+    },
+    {
+      "id": "Generators",
+      "level": 3,
+      "word_count": 24
+    },
+    {
+      "id": "XML",
+      "level": 3,
+      "word_count": 101
+    },
+    {
+      "id": "Entities",
+      "level": 3,
+      "word_count": 117
+    },
+    {
+      "id": "Table of Contents",
+      "level": 3,
+      "word_count": 295
+    },
+    {
+      "id": "Quick search",
+      "level": 3,
+      "word_count": 0
+    }
+  ],
+  "edges": []
+}

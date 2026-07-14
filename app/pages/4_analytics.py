@@ -1,6 +1,5 @@
 """
 app/pages/4_analytics.py
-Owner: Hung (A)
 Advanced analytics dashboard - fully wired with all advanced features.
 """
 
@@ -24,9 +23,7 @@ st.set_page_config(page_title="Analytics - BS4 Analytics",
 st.title("📈 Analytics Dashboard")
 
 
-# ---------------------------------------------------------------------------
 # Fetch helpers - no caching to avoid stale data
-# ---------------------------------------------------------------------------
 
 def fetch_summary():
     r = requests.get(f"{API_BASE}/analytics/summary", timeout=15)
@@ -60,9 +57,7 @@ except Exception as e:
 sections_df = pd.DataFrame(sections)
 code_df     = pd.DataFrame(code)
 
-# ---------------------------------------------------------------------------
 # Metric cards (stat_cards component)
-# ---------------------------------------------------------------------------
 st.subheader("Key metrics")
 c1, c2, c3, c4, c5, c6 = st.columns(6)
 c1.metric("Sections",               summary.get("total_sections", "–"))
@@ -76,9 +71,7 @@ c6.metric("Readability score",
 
 st.divider()
 
-# ---------------------------------------------------------------------------
 # Tabs
-# ---------------------------------------------------------------------------
 tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs([
     "📊 Word Count",
     "💻 Code Examples",
@@ -90,7 +83,7 @@ tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs([
     "🔥 Similarity",
 ])
 
-# ── Tab 1 - Word Count ──────────────────────────────────────────────────────
+# Tab 1 - Word Count 
 with tab1:
     st.subheader("Top 10 sections by word count")
     top10 = sections_df.nlargest(10, "word_count")[["section_title", "word_count"]]
@@ -100,7 +93,7 @@ with tab1:
     fig.update_layout(yaxis={"categoryorder": "total ascending"}, showlegend=False)
     st.plotly_chart(fig, use_container_width=True)
 
-# ── Tab 2 - Code Examples ───────────────────────────────────────────────────
+# Tab 2 - Code Examples
 with tab2:
     st.subheader("Code examples per section (top 10)")
     counts = (code_df.groupby("section_title").size()
@@ -122,7 +115,7 @@ with tab2:
                   color=method_counts, color_continuous_scale="Purples")
     st.plotly_chart(fig2, use_container_width=True)
 
-# ── Tab 3 - Link Types ──────────────────────────────────────────────────────
+# Tab 3 - Link Types
 with tab3:
     st.subheader("Link type distribution")
     fig = px.pie(values=list(link_stats.values()),
@@ -137,7 +130,7 @@ with tab3:
         use_container_width=True, hide_index=True,
     )
 
-# ── Tab 4 - Line Counts ─────────────────────────────────────────────────────
+# Tab 4 - Line Counts
 with tab4:
     st.subheader("Code example line count distribution")
     mean_v   = code_df["line_count"].mean()
@@ -151,7 +144,7 @@ with tab4:
                   annotation_text=f"Median {median_v:.1f}")
     st.plotly_chart(fig, use_container_width=True)
 
-# ── Tab 5 - Keywords (raw frequency) ───────────────────────────────────────
+# Tab 5 - Keywords (raw frequency) 
 with tab5:
     st.subheader("Top 10 keywords - raw frequency")
     kw_data = summary.get("top_10_keywords", [])
@@ -165,7 +158,7 @@ with tab5:
     else:
         st.info("Run the pipeline to see keyword data.")
 
-# ── Tab 6 - TF-IDF Keywords + Wordcloud ────────────────────────────────────
+# Tab 6 - TF-IDF Keywords + Wordcloud
 with tab6:
     tfidf_data = summary.get("adv_top_tfidf_keywords")
     if tfidf_data:
@@ -187,7 +180,7 @@ with tab6:
     else:
         st.info("Run `python -m pipeline.pipeline --skip-fetch` to generate TF-IDF data.")
 
-# ── Tab 7 - Readability ─────────────────────────────────────────────────────
+# Tab 7 - Readability 
 with tab7:
     avg_score = summary.get("adv_avg_readability_score")
     if avg_score:
@@ -229,7 +222,7 @@ with tab7:
     else:
         st.info("Run `python -m pipeline.pipeline --skip-fetch` to generate readability data.")
 
-# ── Tab 8 - Similarity ──────────────────────────────────────────────────────
+# Tab 8 - Similarity
 with tab8:
     pairs_data = summary.get("adv_top_similar_pairs")
     if pairs_data:

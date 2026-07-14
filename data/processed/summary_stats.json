@@ -1,0 +1,196 @@
+{
+  "total_sections": 113,
+  "highest_wordcount_section": "Searching the tree",
+  "highest_wordcount_value": 4711,
+  "most_code_examples_section": "Multi-valued attributes",
+  "most_code_examples_count": 13,
+  "most_links_section": "Table of Contents",
+  "most_links_count": 128,
+  "top_10_keywords": [
+    {
+      "keyword": "soup",
+      "count": 926
+    },
+    {
+      "keyword": "class",
+      "count": 511
+    },
+    {
+      "keyword": "html",
+      "count": 420
+    },
+    {
+      "keyword": "example",
+      "count": 419
+    },
+    {
+      "keyword": "string",
+      "count": 387
+    },
+    {
+      "keyword": "href",
+      "count": 378
+    },
+    {
+      "keyword": "http",
+      "count": 363
+    },
+    {
+      "keyword": "beautiful",
+      "count": 351
+    },
+    {
+      "keyword": "document",
+      "count": 287
+    },
+    {
+      "keyword": "sister",
+      "count": 286
+    }
+  ],
+  "link_type_counts": {
+    "internal_anchor": 342,
+    "external_link": 21,
+    "documentation_link": 11,
+    "empty_or_invalid": 2
+  },
+  "find_all_example_count": 41,
+  "get_text_example_count": 4,
+  "avg_words_per_section": 363.28,
+  "sections_with_no_code": 22,
+  "adv_top_tfidf_keywords": [
+    {
+      "keyword": "tag",
+      "count": 13.1414
+    },
+    {
+      "keyword": "soup",
+      "count": 12.996
+    },
+    {
+      "keyword": "class",
+      "count": 7.6919
+    },
+    {
+      "keyword": "html",
+      "count": 7.4027
+    },
+    {
+      "keyword": "com",
+      "count": 7.3748
+    },
+    {
+      "keyword": "example",
+      "count": 7.335
+    },
+    {
+      "keyword": "beautiful",
+      "count": 7.1523
+    },
+    {
+      "keyword": "string",
+      "count": 7.14
+    },
+    {
+      "keyword": "title",
+      "count": 6.4381
+    },
+    {
+      "keyword": "document",
+      "count": 6.3101
+    },
+    {
+      "keyword": "parser",
+      "count": 6.0958
+    },
+    {
+      "keyword": "href",
+      "count": 6.0858
+    },
+    {
+      "keyword": "id",
+      "count": 6.0485
+    },
+    {
+      "keyword": "http",
+      "count": 6.0155
+    },
+    {
+      "keyword": "elsie",
+      "count": 4.9716
+    },
+    {
+      "keyword": "beautifulsoup",
+      "count": 4.9141
+    },
+    {
+      "keyword": "sister",
+      "count": 4.7607
+    },
+    {
+      "keyword": "markup",
+      "count": 4.6316
+    },
+    {
+      "keyword": "story",
+      "count": 4.6183
+    },
+    {
+      "keyword": "find_all",
+      "count": 4.3487
+    }
+  ],
+  "adv_avg_readability_score": 55.99,
+  "adv_top_similar_pairs": [
+    [
+      "Low-level search interface",
+      "Custom element filtering",
+      0.9823
+    ],
+    [
+      "Beautiful Soup 3",
+      "Porting code to BS4",
+      0.9572
+    ],
+    [
+      "Specifying the parser to use",
+      "Differences between parsers",
+      0.9338
+    ],
+    [
+      "Going sideways",
+      ".next_siblingand.previous_sibling",
+      0.9287
+    ],
+    [
+      "Output",
+      "Output formatters",
+      0.9162
+    ],
+    [
+      "Searching the tree",
+      "find_all()",
+      0.9016
+    ],
+    [
+      "Going back and forth",
+      ".next_elementand.previous_element",
+      0.8991
+    ],
+    [
+      "Installing Beautiful Soup",
+      "Installing a parser",
+      0.8936
+    ],
+    [
+      "Getting help",
+      "API documentation",
+      0.8795
+    ],
+    [
+      "find_all()",
+      "The keyword arguments",
+      0.8618
+    ]
+  ]
+}
