@@ -1,7 +1,6 @@
 """
 pipeline/advanced/graph_builder.py
-Owner: Hung (A)
-Advanced — builds a directed section-link network as a networkx DiGraph
+Advanced - builds a directed section-link network as a networkx DiGraph
            and exports it as D3-compatible JSON for the /graph API endpoint.
 """
 
@@ -20,7 +19,7 @@ def build_graph(sections: pd.DataFrame, links: pd.DataFrame) -> dict:
     """
     Build a {nodes, edges} dict from sections and internal/documentation links.
 
-    Nodes : one per section — id, level, word_count attributes
+    Nodes : one per section - id, level, word_count attributes
     Edges : one per internal_anchor or documentation_link that resolves
             to a known section title
 
@@ -59,16 +58,29 @@ def build_graph(sections: pd.DataFrame, links: pd.DataFrame) -> dict:
 
 
 def _resolve_href(href: str, known_titles: set[str]) -> str | None:
-    """
-    Attempt to map an anchor href (e.g. '#quick-start') to a section title.
-    Returns None if no match found.
-    """
     if not href or not href.startswith("#"):
         return None
-    slug = href.lstrip("#").lower().replace("-", " ")
+    # Convert anchor slug to searchable text
+    slug = href.lstrip("#").lower().replace("-", " ").strip()
+    
+    # Pass 1 - exact match after normalising both sides
     for title in known_titles:
-        if title.lower() == slug or slug in title.lower():
+        if title.lower().strip() == slug:
             return title
+    
+    # Pass 2 - slug is contained in title or vice versa
+    for title in known_titles:
+        t = title.lower().strip()
+        if slug and (slug in t or t in slug):
+            return title
+    
+    # Pass 3 - word overlap (at least 2 words match)
+    slug_words = set(slug.split())
+    for title in known_titles:
+        title_words = set(title.lower().split())
+        if len(slug_words & title_words) >= 2:
+            return title
+    
     return None
 
 
@@ -79,3 +91,18 @@ def save_graph_json(graph: dict, dest: Path) -> Path:
     logger.info("Graph JSON saved → %s (%d nodes, %d edges)",
                 dest.name, len(graph["nodes"]), len(graph["edges"]))
     return dest
+
+if __name__ == "__main__":
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+    from shared.utils import load_sections, load_links
+    from shared.constants import PROC_DIR
+    sections = load_sections()
+    links    = load_links()
+    graph    = build_graph(sections, links)
+    out      = save_graph_json(graph, PROC_DIR / "section_graph.json")
+    print(f"\n── Section Graph ──")
+    print(f"  Nodes : {len(graph['nodes'])}")
+    print(f"  Edges : {len(graph['edges'])}")
+    print(f"  Saved : {out}")

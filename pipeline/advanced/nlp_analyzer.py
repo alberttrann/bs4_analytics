@@ -1,7 +1,6 @@
 """
 pipeline/advanced/nlp_analyzer.py
-Owner: Hung (A)
-Advanced — TF-IDF keyword ranking, Flesch-Kincaid readability per section,
+Advanced - TF-IDF keyword ranking, Flesch-Kincaid readability per section,
            spaCy NER to extract class/function names.
 """
 
@@ -62,3 +61,21 @@ def extract_entities(sections: pd.DataFrame) -> pd.DataFrame:
                 "entity_label":  ent.label_,
             })
     return pd.DataFrame(rows)
+
+if __name__ == "__main__":
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+    from shared.utils import load_sections
+    sections = load_sections()
+
+    print("\n── TF-IDF Keywords ──")
+    tfidf = compute_tfidf_keywords(sections, top_n=20)
+    for k in tfidf[:10]:
+        print(f"  {k['keyword']:<20} {k['count']:.4f}")
+
+    print("\n── Readability Scores ──")
+    scores = compute_readability(sections)
+    print(f"  Mean  : {scores.mean():.1f}")
+    print(f"  Easiest section : {sections.loc[scores.idxmax(), 'section_title']}")
+    print(f"  Hardest section : {sections.loc[scores.idxmin(), 'section_title']}")

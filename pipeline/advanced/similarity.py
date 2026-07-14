@@ -1,7 +1,6 @@
 """
 pipeline/advanced/similarity.py
-Owner: Hung (A)
-Advanced — cosine similarity matrix between documentation sections.
+Advanced - cosine similarity matrix between documentation sections.
 Used to populate the heatmap in app/pages/4_analytics.py.
 """
 
@@ -59,3 +58,15 @@ def top_similar_pairs(
             pairs.append((titles[i], titles[j], float(matrix[i, j])))
 
     return sorted(pairs, key=lambda x: -x[2])[:top_n]
+
+if __name__ == "__main__":
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+    from shared.utils import load_sections
+    sections = load_sections()
+
+    print("\n── Top Similar Section Pairs ──")
+    pairs = top_similar_pairs(sections, top_n=10)
+    for a, b, score in pairs:
+        print(f"  {score:.3f}  {a[:35]:<35} ↔  {b[:35]}")

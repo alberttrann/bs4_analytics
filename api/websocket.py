@@ -1,7 +1,6 @@
 """
 api/websocket.py
-Owner: Hung (A)
-Advanced — WebSocket endpoint that streams pipeline stdout to the Streamlit
+Advanced - WebSocket endpoint that streams pipeline stdout to the Streamlit
            frontend in real time, powering the live progress bar on the home page.
 
 Register in api/main.py:
@@ -48,7 +47,7 @@ async def pipeline_progress(websocket: WebSocket) -> None:
             if line:
                 await websocket.send_text(line)
     except WebSocketDisconnect:
-        logger.info("WebSocket client disconnected — terminating pipeline")
+        logger.info("WebSocket client disconnected - terminating pipeline")
         process.terminate()
     except Exception as exc:
         logger.exception("WebSocket error: %s", exc)

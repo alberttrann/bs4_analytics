@@ -3,8 +3,6 @@ shared/utils.py
 ===============
 Common utility functions imported by all pipeline stages, API routes,
 and Streamlit pages. 
-
-Ownership: Hung 
 """
 
 from __future__ import annotations
@@ -60,7 +58,7 @@ def load_csv(path: Path, expected_cols: list[str] | None = None) -> pd.DataFrame
     Raises
     ------
     FileNotFoundError
-        When the file doesn't exist — includes a human-friendly message
+        When the file doesn't exist - includes a human-friendly message
         telling the developer to run the pipeline first.
     ValueError
         When the CSV is missing expected columns.

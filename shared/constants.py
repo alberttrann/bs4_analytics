@@ -2,9 +2,7 @@
 shared/constants.py
 ===================
 Central location for every path, URL, column list, and enum value used
-across the project. Import from here — never hardcode strings in feature files.
-
-Ownership: Hung 
+across the project. Import from here - never hardcode strings in feature files.
 """
 
 from pathlib import Path
@@ -88,12 +86,20 @@ CHART_WORD_COUNT      = CHARTS_DIR / "word_count_by_section.png"
 CHART_CODE_BY_SECTION = CHARTS_DIR / "code_examples_by_section.png"
 CHART_LINK_DIST       = CHARTS_DIR / "link_type_distribution.png"
 CHART_LINECOUNT_HIST  = CHARTS_DIR / "code_linecount_hist.png"
+CHART_TFIDF_KEYWORDS   = CHARTS_DIR / "tfidf_keywords.png"
+CHART_READABILITY      = CHARTS_DIR / "readability_by_section.png"
+CHART_SIMILARITY       = CHARTS_DIR / "similarity_heatmap.png"
+CHART_METHOD_USAGE     = CHARTS_DIR / "method_usage.png"
 
 ALL_CHART_PATHS = [
     CHART_WORD_COUNT,
     CHART_CODE_BY_SECTION,
     CHART_LINK_DIST,
     CHART_LINECOUNT_HIST,
+    CHART_TFIDF_KEYWORDS,
+    CHART_READABILITY,
+    CHART_SIMILARITY,
+    CHART_METHOD_USAGE,
 ]
 
 CHART_NAMES = {
@@ -101,6 +107,10 @@ CHART_NAMES = {
     CHART_CODE_BY_SECTION.name: "Code Examples by Section",
     CHART_LINK_DIST.name:       "Link Type Distribution",
     CHART_LINECOUNT_HIST.name:  "Code Example Line Count Distribution",
+    CHART_TFIDF_KEYWORDS.name:  "TF-IDF Keyword Ranking vs Raw Frequency",
+    CHART_READABILITY.name:     "Readability Score by Section (Flesch Reading Ease)",
+    CHART_SIMILARITY.name:      "Section Cosine Similarity Heatmap",
+    CHART_METHOD_USAGE.name:    "BS4 Method Usage in Code Examples",
 }
 
 # Report output paths
@@ -108,7 +118,7 @@ CHART_NAMES = {
 FINAL_REPORT_PDF    = REPORT_DIR / "final_report.pdf"
 SUMMARY_TABLES_XLSX = REPORT_DIR / "summary_tables.xlsx"
 
-# Analytics — stopwords for keyword extraction
+# Analytics - stopwords for keyword extraction
 # in sync with analyzer.py _compute_top_keywords()
 
 STOPWORDS = {

@@ -1,7 +1,6 @@
 # docker/Dockerfile.app
 # =====================
 # Streamlit frontend container
-# Owner: Hung
 #
 # Build:   docker build -f docker/Dockerfile.app -t bs4-app .
 # Run:     docker run -p 8501:8501 -e API_BASE_URL=http://api:8000 bs4-app

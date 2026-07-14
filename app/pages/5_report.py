@@ -1,34 +1,41 @@
 """
 app/pages/5_report.py
 Owner: Hung (A)
-Download page — PDF report, Excel workbook, and individual chart PNGs.
+Download page - PDF report, Excel workbook, and individual chart PNGs.
 """
-
 from __future__ import annotations
+import sys
+from pathlib import Path
+from pathlib import Path
+import sys
 
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
 import os
 
 import streamlit as st
 
 from shared.constants import ALL_CHART_PATHS, CHART_NAMES, FINAL_REPORT_PDF, SUMMARY_TABLES_XLSX
 
-API_BASE = os.getenv("API_BASE_URL", "http://localhost:8000")
+from app.config import API_BASE, WS_BASE
 
-st.set_page_config(page_title="Report — BS4 Analytics", page_icon="📥")
+st.set_page_config(page_title="Report - BS4 Analytics", page_icon="📥")
 st.title("📥 Download Reports")
 
-# Final report PDF
+# Final report - Markdown
 st.subheader("Final analytical report")
-if FINAL_REPORT_PDF.exists():
-    with open(FINAL_REPORT_PDF, "rb") as f:
-        st.download_button(
-            label="📄 Download final_report.pdf",
-            data=f,
-            file_name="final_report.pdf",
-            mime="application/pdf",
-        )
-    size_kb = FINAL_REPORT_PDF.stat().st_size // 1024
-    st.caption(f"File size: {size_kb} KB")
+MD_PATH = Path(__file__).resolve().parent.parent.parent / "output" / "report" / "final_report.md"
+if MD_PATH.exists():
+    with open(MD_PATH, "r", encoding="utf-8") as f:
+        md_content = f.read()
+    st.download_button(
+        label="📄 Download final_report.md",
+        data=md_content,
+        file_name="final_report.md",
+        mime="text/markdown",
+    )
+    with st.expander("Preview report"):
+        st.markdown(md_content[:3000] + "\n\n*... (download for full report)*")
 else:
     st.warning("Report not yet generated. Run the pipeline first.")
 

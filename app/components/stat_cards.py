@@ -1,10 +1,15 @@
 """
 app/components/stat_cards.py
-Owner: Hung (A)
-Advanced — reusable metric card row for any page that needs a summary header.
+Advanced - reusable metric card row for any page that needs a summary header.
 """
-
 from __future__ import annotations
+import sys
+from pathlib import Path
+from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
 import streamlit as st
 
 

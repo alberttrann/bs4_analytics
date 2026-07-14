@@ -4,7 +4,6 @@
 #   api  → http://localhost:8000  (FastAPI + Swagger UI at /docs)
 #   app  → http://localhost:8501  (Streamlit dashboard)
 #
-# Owner: Hung
 # Usage: docker-compose -f docker/docker-compose.yml up --build
 
 version: "3.9"

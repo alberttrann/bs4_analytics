@@ -1,12 +1,16 @@
 """
 app/components/wordcloud_widget.py
-Owner: Hung (A)
-Advanced — keyword wordcloud rendered with the `wordcloud` library + matplotlib.
+Advanced - keyword wordcloud rendered with the `wordcloud` library + matplotlib.
 Uses `wordcloud` package (pip install wordcloud), NOT streamlit-wordcloud.
 """
-
 from __future__ import annotations
+import sys
+from pathlib import Path
+from pathlib import Path
+import sys
 
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
 import io
 
 import matplotlib.pyplot as plt
@@ -33,7 +37,7 @@ def render_wordcloud(keywords: list[dict], title: str = "Keyword Cloud") -> None
         return
 
     if not keywords:
-        st.info("No keyword data — run the pipeline first.")
+        st.info("No keyword data - run the pipeline first.")
         return
 
     # Build frequency dict from the keyword list

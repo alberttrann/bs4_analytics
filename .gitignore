@@ -62,3 +62,4 @@ logs/
 
 # Ruff
 .ruff_cache/
+lib

@@ -1,7 +1,6 @@
 """
 api/routes/graph.py
-Owner: Hung (A)
-Advanced — GET /graph → D3-compatible {nodes, edges} section network JSON.
+Advanced - GET /graph → D3-compatible {nodes, edges} section network JSON.
 """
 
 from __future__ import annotations

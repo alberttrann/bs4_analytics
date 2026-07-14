@@ -1,7 +1,6 @@
 """
 api/routes/search.py
-Owner: Hung (A)
-Advanced — GET /search?q=&target=sections|links|code|all
+Advanced - GET /search?q=&target=sections|links|code|all
 Full-text search across all three processed datasets.
 """
 
