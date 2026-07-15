@@ -1,0 +1,388 @@
+link_text,href,link_type,section_title
+Beautiful Soup,http://www.crummy.com/software/BeautifulSoup/,documentation_link,Beautiful Soup Documentation
+Beautiful Soup 3,http://www.crummy.com/software/BeautifulSoup/bs3/documentation.html,documentation_link,Beautiful Soup Documentation
+Porting code to BS4,#porting-code-to-bs4,internal_anchor,Beautiful Soup Documentation
+这篇文档当然还有中文版.,https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/,documentation_link,Beautiful Soup Documentation
+外部リンク,http://kondou.com/BS4/,external_link,Beautiful Soup Documentation
+이 문서는 한국어 번역도 가능합니다.,https://www.crummy.com/software/BeautifulSoup/bs4/doc.ko/,documentation_link,Beautiful Soup Documentation
+Este documento também está disponível em Português do Brasil.,https://www.crummy.com/software/BeautifulSoup/bs4/doc.ptbr,documentation_link,Beautiful Soup Documentation
+Este documento también está disponible en una traducción al español.,https://www.crummy.com/software/BeautifulSoup/bs4/doc.es/,documentation_link,Beautiful Soup Documentation
+Эта документация доступна на русском языке.,https://www.crummy.com/software/BeautifulSoup/bs4/doc.ru/,documentation_link,Beautiful Soup Documentation
+send mail to the discussion group,https://groups.google.com/forum/?fromgroups#!forum/beautifulsoup,external_link,Getting help
+what the diagnose() function says,#diagnose,internal_anchor,Getting help
+traditional API documentation,api/modules.html,external_link,API documentation
+Beautiful Soup 3,http://www.crummy.com/software/BeautifulSoup/bs3/documentation.html,documentation_link,Installing Beautiful Soup
+download the Beautiful Soup 4 source tarball,http://www.crummy.com/software/BeautifulSoup/download/4.x/,documentation_link,Installing Beautiful Soup
+lxml parser,http://lxml.de/,external_link,Installing a parser
+html5lib parser,http://code.google.com/p/html5lib/,external_link,Installing a parser
+"Differences
+between parsers",#differences-between-parsers,internal_anchor,Installing a parser
+Parsing XML,#id15,internal_anchor,Making the soup
+Tag,#Tag,internal_anchor,Kinds of objects
+NavigableString,#NavigableString,internal_anchor,Kinds of objects
+Comment,#Comment,internal_anchor,Kinds of objects
+Tag,#Tag,internal_anchor,Kinds of objects
+Navigating the tree,#navigating-the-tree,internal_anchor,Kinds of objects
+Searching the tree,#searching-the-tree,internal_anchor,Kinds of objects
+NavigableString,#NavigableString,internal_anchor,Multi-valued attributes
+NavigableString,#NavigableString,internal_anchor,Multi-valued attributes
+"Navigating
+the tree",#navigating-the-tree,internal_anchor,Multi-valued attributes
+Searching the tree,#searching-the-tree,internal_anchor,Multi-valued attributes
+NavigableString,#NavigableString,internal_anchor,Multi-valued attributes
+replace_with(),#replace-with,internal_anchor,Multi-valued attributes
+NavigableString,#NavigableString,internal_anchor,Multi-valued attributes
+Navigating the tree,#navigating-the-tree,internal_anchor,Multi-valued attributes
+Searching the tree,#searching-the-tree,internal_anchor,Multi-valued attributes
+NavigableString,#NavigableString,internal_anchor,Multi-valued attributes
+Tag,#Tag,internal_anchor,Multi-valued attributes
+Navigating the tree,#navigating-the-tree,internal_anchor,Multi-valued attributes
+Searching the tree,#searching-the-tree,internal_anchor,Multi-valued attributes
+Modifying the tree,#modifying-the-tree,internal_anchor,Multi-valued attributes
+Tag,#Tag,internal_anchor,Multi-valued attributes
+Tag,#Tag,internal_anchor,Multi-valued attributes
+Tag,#Tag,internal_anchor,Special strings
+NavigableString,#NavigableString,internal_anchor,Special strings
+Comment,#Comment,internal_anchor,Special strings
+Comment,#Comment,internal_anchor,Special strings
+NavigableString,#NavigableString,internal_anchor,Special strings
+Comment,#Comment,internal_anchor,Special strings
+NavigableString,#NavigableString,internal_anchor,For HTML documents
+NavigableString,#NavigableString,internal_anchor,For HTML documents
+NavigableString,#NavigableString,internal_anchor,For HTML documents
+NavigableString,#NavigableString,internal_anchor,For HTML documents
+NavigableString,#NavigableString,internal_anchor,For XML documents
+Comment,#Comment,internal_anchor,For XML documents
+NavigableString,#NavigableString,internal_anchor,For XML documents
+NavigableString,#NavigableString,internal_anchor,For XML documents
+declaration,https://www.w3.org/TR/REC-xml/#sec-prolog-dtd,external_link,For XML documents
+NavigableString,#NavigableString,internal_anchor,For XML documents
+"document type
+declaration",https://www.w3.org/TR/REC-xml/#dt-doctype,external_link,For XML documents
+NavigableString,#NavigableString,internal_anchor,For XML documents
+CData section,https://www.w3.org/TR/REC-xml/#sec-cdata-sect,external_link,For XML documents
+NavigableString,#NavigableString,internal_anchor,For XML documents
+XML processing instruction,https://www.w3.org/TR/REC-xml/#sec-pi,external_link,For XML documents
+Searching the tree,#searching-the-tree,internal_anchor,Navigating using tag names
+Modifying the tree,#modifying-the-tree,internal_anchor,.contentsand.children
+NavigableString,#NavigableString,internal_anchor,.string
+The keyword arguments,#kwargs,internal_anchor,.next_siblingsand.previous_siblings
+name,#name,internal_anchor,find_all()
+attrs,#attrs,internal_anchor,find_all()
+recursive,#recursive,internal_anchor,find_all()
+string,#id11,internal_anchor,find_all()
+limit,#limit,internal_anchor,find_all()
+**kwargs,#kwargs,internal_anchor,find_all()
+Kinds of filters,#kinds-of-filters,internal_anchor,find_all()
+Kinds of filters,#kinds-of-filters,internal_anchor,Thenameargument
+"a
+string",#a-string,internal_anchor,Thenameargument
+a regular expression,#a-regular-expression,internal_anchor,Thenameargument
+a list,#a-list,internal_anchor,Thenameargument
+a function,#a-function,internal_anchor,Thenameargument
+"the value
+True",#the-value-true,internal_anchor,Thenameargument
+a string,#a-string,internal_anchor,The keyword arguments
+a regular expression,#a-regular-expression,internal_anchor,The keyword arguments
+a list,#a-list,internal_anchor,The keyword arguments
+a function,#a-function,internal_anchor,The keyword arguments
+the value True,#the-value-true,internal_anchor,The keyword arguments
+Remember,#multivalue,internal_anchor,Searching by CSS class
+described here,#css-selectors,internal_anchor,Searching by CSS class
+a string,#a-string,internal_anchor,Thestringargument
+"a
+regular expression",#a-regular-expression,internal_anchor,Thestringargument
+a function,#a-function,internal_anchor,Thestringargument
+a list,#a-list,internal_anchor,Thestringargument
+the value True,#the-value-true,internal_anchor,Thestringargument
+Tag,#Tag,internal_anchor,Calling a tag is like callingfind_all()
+name,#name,internal_anchor,find()
+attrs,#attrs,internal_anchor,find()
+recursive,#recursive,internal_anchor,find()
+string,#id11,internal_anchor,find()
+**kwargs,#kwargs,internal_anchor,find()
+"Navigating using tag
+names",#navigating-using-tag-names,internal_anchor,find()
+name,#name,internal_anchor,find_parents()andfind_parent()
+attrs,#attrs,internal_anchor,find_parents()andfind_parent()
+string,#id11,internal_anchor,find_parents()andfind_parent()
+limit,#limit,internal_anchor,find_parents()andfind_parent()
+**kwargs,#kwargs,internal_anchor,find_parents()andfind_parent()
+name,#name,internal_anchor,find_parents()andfind_parent()
+attrs,#attrs,internal_anchor,find_parents()andfind_parent()
+string,#id11,internal_anchor,find_parents()andfind_parent()
+**kwargs,#kwargs,internal_anchor,find_parents()andfind_parent()
+.parent,#parent,internal_anchor,find_parents()andfind_parent()
+.parents,#parents,internal_anchor,find_parents()andfind_parent()
+name,#name,internal_anchor,find_next_siblings()andfind_next_sibling()
+attrs,#attrs,internal_anchor,find_next_siblings()andfind_next_sibling()
+string,#id11,internal_anchor,find_next_siblings()andfind_next_sibling()
+limit,#limit,internal_anchor,find_next_siblings()andfind_next_sibling()
+**kwargs,#kwargs,internal_anchor,find_next_siblings()andfind_next_sibling()
+name,#name,internal_anchor,find_next_siblings()andfind_next_sibling()
+attrs,#attrs,internal_anchor,find_next_siblings()andfind_next_sibling()
+string,#id11,internal_anchor,find_next_siblings()andfind_next_sibling()
+**kwargs,#kwargs,internal_anchor,find_next_siblings()andfind_next_sibling()
+.next_siblings,#sibling-generators,internal_anchor,find_next_siblings()andfind_next_sibling()
+name,#name,internal_anchor,find_previous_siblings()andfind_previous_sibling()
+attrs,#attrs,internal_anchor,find_previous_siblings()andfind_previous_sibling()
+string,#id11,internal_anchor,find_previous_siblings()andfind_previous_sibling()
+limit,#limit,internal_anchor,find_previous_siblings()andfind_previous_sibling()
+**kwargs,#kwargs,internal_anchor,find_previous_siblings()andfind_previous_sibling()
+name,#name,internal_anchor,find_previous_siblings()andfind_previous_sibling()
+attrs,#attrs,internal_anchor,find_previous_siblings()andfind_previous_sibling()
+string,#id11,internal_anchor,find_previous_siblings()andfind_previous_sibling()
+**kwargs,#kwargs,internal_anchor,find_previous_siblings()andfind_previous_sibling()
+.previous_siblings,#sibling-generators,internal_anchor,find_previous_siblings()andfind_previous_sibling()
+name,#name,internal_anchor,find_all_next()andfind_next()
+attrs,#attrs,internal_anchor,find_all_next()andfind_next()
+string,#id11,internal_anchor,find_all_next()andfind_next()
+limit,#limit,internal_anchor,find_all_next()andfind_next()
+**kwargs,#kwargs,internal_anchor,find_all_next()andfind_next()
+name,#name,internal_anchor,find_all_next()andfind_next()
+attrs,#attrs,internal_anchor,find_all_next()andfind_next()
+string,#id11,internal_anchor,find_all_next()andfind_next()
+**kwargs,#kwargs,internal_anchor,find_all_next()andfind_next()
+.next_elements,#element-generators,internal_anchor,find_all_next()andfind_next()
+document order,#document-order,internal_anchor,find_all_next()andfind_next()
+name,#name,internal_anchor,find_all_previous()andfind_previous()
+attrs,#attrs,internal_anchor,find_all_previous()andfind_previous()
+string,#id11,internal_anchor,find_all_previous()andfind_previous()
+limit,#limit,internal_anchor,find_all_previous()andfind_previous()
+**kwargs,#kwargs,internal_anchor,find_all_previous()andfind_previous()
+name,#name,internal_anchor,find_all_previous()andfind_previous()
+attrs,#attrs,internal_anchor,find_all_previous()andfind_previous()
+string,#id11,internal_anchor,find_all_previous()andfind_previous()
+**kwargs,#kwargs,internal_anchor,find_all_previous()andfind_previous()
+.previous_elements,#element-generators,internal_anchor,find_all_previous()andfind_previous()
+document order,#document-order,internal_anchor,find_all_previous()andfind_previous()
+Tag,#Tag,internal_anchor,CSS selectors through the.cssproperty
+Soup Sieve,https://facelessuser.github.io/soupsieve/,external_link,CSS selectors through the.cssproperty
+"all the currently supported CSS
+selectors",https://facelessuser.github.io/soupsieve/selectors/,external_link,CSS selectors through the.cssproperty
+Tag,#Tag,internal_anchor,CSS selectors through the.cssproperty
+Tag,#Tag,internal_anchor,Advanced Soup Sieve features
+"the Soup Sieve
+documentation",https://facelessuser.github.io/soupsieve/,external_link,Advanced Soup Sieve features
+Tag,#Tag,internal_anchor,Advanced Soup Sieve features
+Tag,#Tag,internal_anchor,Advanced Soup Sieve features
+Tag.attrs,#Tag.attrs,internal_anchor,Changing tag names and attributes
+Tag,#Tag,internal_anchor,extend()
+Tag,#Tag,internal_anchor,extend()
+NavigableString,#NavigableString,internal_anchor,NavigableString()and.new_tag()
+NavigableString,#NavigableString,internal_anchor,NavigableString()and.new_tag()
+Tag,#Tag,internal_anchor,decompose()
+NavigableString,#NavigableString,internal_anchor,decompose()
+Tag,#Tag,internal_anchor,wrap()
+NavigableString,#NavigableString,internal_anchor,smooth()
+Tag,#Tag,internal_anchor,Pretty-printing
+Tag,#Tag,internal_anchor,Non-pretty printing
+Encodings,#encodings,internal_anchor,Non-pretty printing
+HTMLFormatter,#HTMLFormatter,internal_anchor,Writing your own formatter
+XMLFormatter,#XMLFormatter,internal_anchor,Writing your own formatter
+CData,#CData,internal_anchor,Writing your own formatter
+.stripped_strings,#string-generators,internal_anchor,get_text()
+Installing a parser,#installing-a-parser,internal_anchor,Specifying the parser to use
+"Unicode, Dammit",#unicode-dammit,internal_anchor,Encodings
+Tag,#Tag,internal_anchor,Line numbers
+NavigableString,#NavigableString,internal_anchor,Comparing objects for equality
+Tag,#Tag,internal_anchor,Comparing objects for equality
+Tag,#Tag,internal_anchor,Copying Beautiful Soup objects
+NavigableString,#NavigableString,internal_anchor,Copying Beautiful Soup objects
+Tag,#Tag,internal_anchor,Copying Beautiful Soup objects
+Tag,#Tag,internal_anchor,Copying Beautiful Soup objects
+Searching the tree,#searching-the-tree,internal_anchor,Low-level search interface
+ElementFilter,#ElementFilter,internal_anchor,Custom element filtering
+Tag,#Tag,internal_anchor,Custom element filtering
+NavigableString,#NavigableString,internal_anchor,Custom element filtering
+ElementFilter,#ElementFilter,internal_anchor,Custom element filtering
+ElementFilter,#ElementFilter,internal_anchor,Custom element filtering
+Searching the tree,#searching-the-tree,internal_anchor,Custom element filtering
+Tag,#Tag,internal_anchor,Custom element filtering
+NavigableString,#NavigableString,internal_anchor,Custom element filtering
+ElementFilter,#ElementFilter,internal_anchor,Custom element filtering
+Tag,#Tag,internal_anchor,Custom element filtering
+NavigableString,#NavigableString,internal_anchor,Custom element filtering
+ElementFilter,#ElementFilter,internal_anchor,Custom element iteration
+ElementFilter.filter(),#ElementFilter.filter,internal_anchor,Custom element iteration
+ElementFilter.filter(),#ElementFilter.filter,internal_anchor,Custom element iteration
+ElementFilter.filter(),#ElementFilter.filter,internal_anchor,Custom element iteration
+SoupStrainer,#SoupStrainer,internal_anchor,Parsing only part of a document
+SoupStrainer,#SoupStrainer,internal_anchor,Parsing only part of a document
+SoupStrainer,#SoupStrainer,internal_anchor,Parsing only part of a document
+Searching the tree,#searching-the-tree,internal_anchor,Parsing only part of a document
+name,#name,internal_anchor,Parsing only part of a document
+attrs,#attrs,internal_anchor,Parsing only part of a document
+string,#id11,internal_anchor,Parsing only part of a document
+**kwargs,#kwargs,internal_anchor,Parsing only part of a document
+SoupStrainer,#SoupStrainer,internal_anchor,Parsing only part of a document
+SoupStrainer,#SoupStrainer,internal_anchor,Parsing only part of a document
+SoupStrainer,#SoupStrainer,internal_anchor,Parsing only part of a document
+SoupStrainer,#SoupStrainer,internal_anchor,Parsing only part of a document
+SoupStrainer,#SoupStrainer,internal_anchor,Parsing only part of a document
+SoupStrainer,#SoupStrainer,internal_anchor,Parsing only part of a document
+SoupStrainer,#SoupStrainer,internal_anchor,Parsing only part of a document
+Tag,#Tag,internal_anchor,Parsing only part of a document
+class,https://docs.python.org/3/glossary.html#term-class,external_link,Parsing only part of a document
+Tag,#Tag,internal_anchor,Instantiating custom subclasses
+NavigableString,#NavigableString,internal_anchor,Instantiating custom subclasses
+Tag,#Tag,internal_anchor,Instantiating custom subclasses
+NavigableString,#NavigableString,internal_anchor,Instantiating custom subclasses
+Installing a parser,#installing-a-parser,internal_anchor,Errors when parsing a document
+have lxml installed,#parser-installation,internal_anchor,Parsing XML
+Differences between parsers,#differences-between-parsers,internal_anchor,Other parser problems
+HTML tags and attributes are case-insensitive,http://www.w3.org/TR/html5/syntax.html#syntax,external_link,Other parser problems
+parse the document as XML.,#parsing-xml,internal_anchor,Other parser problems
+"this page on the
+Python wiki",http://wiki.python.org/moin/PrintFails,external_link,Miscellaneous
+lxml,http://lxml.de/,external_link,Improving Performance
+start,#parser-installation,internal_anchor,Improving Performance
+cchardet,http://pypi.python.org/pypi/cchardet/,external_link,Improving Performance
+Parsing only part of a document,#parsing-only-part-of-a-document,internal_anchor,Improving Performance
+"a tarball of the final release, 3.2.2",https://www.crummy.com/software/BeautifulSoup/download/3.x/BeautifulSoup-3.2.2.tar.gz,documentation_link,Beautiful Soup 3
+The documentation for Beautiful Soup 3 is archived online,http://www.crummy.com/software/BeautifulSoup/bs3/documentation.html,documentation_link,Beautiful Soup 3
+PEP 8 compliance,http://www.python.org/dev/peps/pep-0008/,external_link,Porting code to BS4
+Installing a parser,#installing-a-parser,internal_anchor,You need a parser
+"Unicode,
+Dammit",#unicode-dammit,internal_anchor,Entities
+output formatter,#output-formatters,internal_anchor,Entities
+Tag.string,#string,internal_anchor,Miscellaneous
+Multi-valued attributes,#multi-valued-attributes,internal_anchor,Miscellaneous
+Tag,#Tag,internal_anchor,Miscellaneous
+Tag,#Tag,internal_anchor,Miscellaneous
+Tag,#Tag,internal_anchor,Miscellaneous
+string,#id11,internal_anchor,Miscellaneous
+name,#name,internal_anchor,Miscellaneous
+Tag.string,#string,internal_anchor,Miscellaneous
+string,#id11,internal_anchor,Miscellaneous
+Table of Contents,#,empty_or_invalid,Table of Contents
+Beautiful Soup Documentation,#,empty_or_invalid,Table of Contents
+Getting help,#getting-help,internal_anchor,Table of Contents
+API documentation,#api-documentation,internal_anchor,Table of Contents
+Quick Start,#quick-start,internal_anchor,Table of Contents
+Installing Beautiful Soup,#installing-beautiful-soup,internal_anchor,Table of Contents
+Installing a parser,#installing-a-parser,internal_anchor,Table of Contents
+Making the soup,#making-the-soup,internal_anchor,Table of Contents
+Kinds of objects,#kinds-of-objects,internal_anchor,Table of Contents
+Tag,#Tag,internal_anchor,Table of Contents
+Tag.name,#Tag.name,internal_anchor,Table of Contents
+Tag.attrs,#Tag.attrs,internal_anchor,Table of Contents
+NavigableString,#NavigableString,internal_anchor,Table of Contents
+Special strings,#special-strings,internal_anchor,Table of Contents
+Comment,#Comment,internal_anchor,Table of Contents
+For HTML documents,#for-html-documents,internal_anchor,Table of Contents
+Stylesheet,#Stylesheet,internal_anchor,Table of Contents
+Script,#Script,internal_anchor,Table of Contents
+Template,#Template,internal_anchor,Table of Contents
+For XML documents,#for-xml-documents,internal_anchor,Table of Contents
+Declaration,#Declaration,internal_anchor,Table of Contents
+Doctype,#Doctype,internal_anchor,Table of Contents
+CData,#CData,internal_anchor,Table of Contents
+ProcessingInstruction,#ProcessingInstruction,internal_anchor,Table of Contents
+Navigating the tree,#navigating-the-tree,internal_anchor,Table of Contents
+Going down,#going-down,internal_anchor,Table of Contents
+Navigating using tag names,#navigating-using-tag-names,internal_anchor,Table of Contents
+.contentsand.children,#contents-and-children,internal_anchor,Table of Contents
+.descendants,#descendants,internal_anchor,Table of Contents
+.string,#string,internal_anchor,Table of Contents
+.stringsandstripped_strings,#strings-and-stripped-strings,internal_anchor,Table of Contents
+Going up,#going-up,internal_anchor,Table of Contents
+.parent,#parent,internal_anchor,Table of Contents
+.parents,#parents,internal_anchor,Table of Contents
+.self_and_parents,#self-and-parents,internal_anchor,Table of Contents
+Going sideways,#going-sideways,internal_anchor,Table of Contents
+.next_siblingand.previous_sibling,#next-sibling-and-previous-sibling,internal_anchor,Table of Contents
+.next_siblingsand.previous_siblings,#next-siblings-and-previous-siblings,internal_anchor,Table of Contents
+Going back and forth,#going-back-and-forth,internal_anchor,Table of Contents
+.next_elementand.previous_element,#next-element-and-previous-element,internal_anchor,Table of Contents
+.next_elementsand.previous_elements,#next-elements-and-previous-elements,internal_anchor,Table of Contents
+Searching the tree,#searching-the-tree,internal_anchor,Table of Contents
+Kinds of filters,#kinds-of-filters,internal_anchor,Table of Contents
+A string,#a-string,internal_anchor,Table of Contents
+A regular expression,#a-regular-expression,internal_anchor,Table of Contents
+True,#true,internal_anchor,Table of Contents
+A function,#a-function,internal_anchor,Table of Contents
+A list,#a-list,internal_anchor,Table of Contents
+find_all(),#find-all,internal_anchor,Table of Contents
+Thenameargument,#the-name-argument,internal_anchor,Table of Contents
+The keyword arguments,#the-keyword-arguments,internal_anchor,Table of Contents
+Searching by CSS class,#searching-by-css-class,internal_anchor,Table of Contents
+Thestringargument,#the-string-argument,internal_anchor,Table of Contents
+Thelimitargument,#the-limit-argument,internal_anchor,Table of Contents
+Therecursiveargument,#the-recursive-argument,internal_anchor,Table of Contents
+Calling a tag is like callingfind_all(),#calling-a-tag-is-like-calling-find-all,internal_anchor,Table of Contents
+find(),#find,internal_anchor,Table of Contents
+find_parents()andfind_parent(),#find-parents-and-find-parent,internal_anchor,Table of Contents
+find_next_siblings()andfind_next_sibling(),#find-next-siblings-and-find-next-sibling,internal_anchor,Table of Contents
+find_previous_siblings()andfind_previous_sibling(),#find-previous-siblings-and-find-previous-sibling,internal_anchor,Table of Contents
+find_all_next()andfind_next(),#find-all-next-and-find-next,internal_anchor,Table of Contents
+find_all_previous()andfind_previous(),#find-all-previous-and-find-previous,internal_anchor,Table of Contents
+CSS selectors through the.cssproperty,#css-selectors-through-the-css-property,internal_anchor,Table of Contents
+Advanced Soup Sieve features,#advanced-soup-sieve-features,internal_anchor,Table of Contents
+Namespaces in CSS selectors,#namespaces-in-css-selectors,internal_anchor,Table of Contents
+History of CSS selector support,#history-of-css-selector-support,internal_anchor,Table of Contents
+Modifying the tree,#modifying-the-tree,internal_anchor,Table of Contents
+Changing tag names and attributes,#changing-tag-names-and-attributes,internal_anchor,Table of Contents
+Modifying.string,#modifying-string,internal_anchor,Table of Contents
+append(),#append,internal_anchor,Table of Contents
+extend(),#extend,internal_anchor,Table of Contents
+NavigableString()and.new_tag(),#navigablestring-and-new-tag,internal_anchor,Table of Contents
+insert(),#insert,internal_anchor,Table of Contents
+insert_before()andinsert_after(),#insert-before-and-insert-after,internal_anchor,Table of Contents
+clear(),#clear,internal_anchor,Table of Contents
+extract(),#extract,internal_anchor,Table of Contents
+decompose(),#decompose,internal_anchor,Table of Contents
+replace_with(),#replace-with,internal_anchor,Table of Contents
+wrap(),#wrap,internal_anchor,Table of Contents
+unwrap(),#unwrap,internal_anchor,Table of Contents
+smooth(),#smooth,internal_anchor,Table of Contents
+Output,#output,internal_anchor,Table of Contents
+Pretty-printing,#pretty-printing,internal_anchor,Table of Contents
+Non-pretty printing,#non-pretty-printing,internal_anchor,Table of Contents
+Output formatters,#output-formatters,internal_anchor,Table of Contents
+Formatter objects,#formatter-objects,internal_anchor,Table of Contents
+HTMLFormatter,#HTMLFormatter,internal_anchor,Table of Contents
+XMLFormatter,#XMLFormatter,internal_anchor,Table of Contents
+Writing your own formatter,#writing-your-own-formatter,internal_anchor,Table of Contents
+get_text(),#get-text,internal_anchor,Table of Contents
+Specifying the parser to use,#specifying-the-parser-to-use,internal_anchor,Table of Contents
+Differences between parsers,#differences-between-parsers,internal_anchor,Table of Contents
+Encodings,#encodings,internal_anchor,Table of Contents
+Output encoding,#output-encoding,internal_anchor,Table of Contents
+"Unicode, Dammit",#unicode-dammit,internal_anchor,Table of Contents
+Smart quotes,#smart-quotes,internal_anchor,Table of Contents
+Inconsistent encodings,#inconsistent-encodings,internal_anchor,Table of Contents
+Line numbers,#line-numbers,internal_anchor,Table of Contents
+Comparing objects for equality,#comparing-objects-for-equality,internal_anchor,Table of Contents
+Copying Beautiful Soup objects,#copying-beautiful-soup-objects,internal_anchor,Table of Contents
+Low-level search interface,#low-level-search-interface,internal_anchor,Table of Contents
+Custom element filtering,#custom-element-filtering,internal_anchor,Table of Contents
+ElementFilter,#ElementFilter,internal_anchor,Table of Contents
+Custom element iteration,#custom-element-iteration,internal_anchor,Table of Contents
+ElementFilter.filter(),#ElementFilter.filter,internal_anchor,Table of Contents
+Advanced parser customization,#advanced-parser-customization,internal_anchor,Table of Contents
+Parsing only part of a document,#parsing-only-part-of-a-document,internal_anchor,Table of Contents
+SoupStrainer,#SoupStrainer,internal_anchor,Table of Contents
+Customizing multi-valued attributes,#customizing-multi-valued-attributes,internal_anchor,Table of Contents
+Handling duplicate attributes,#handling-duplicate-attributes,internal_anchor,Table of Contents
+Instantiating custom subclasses,#instantiating-custom-subclasses,internal_anchor,Table of Contents
+Troubleshooting,#troubleshooting,internal_anchor,Table of Contents
+diagnose(),#diagnose,internal_anchor,Table of Contents
+Errors when parsing a document,#errors-when-parsing-a-document,internal_anchor,Table of Contents
+Version mismatch problems,#version-mismatch-problems,internal_anchor,Table of Contents
+Parsing XML,#parsing-xml,internal_anchor,Table of Contents
+Other parser problems,#other-parser-problems,internal_anchor,Table of Contents
+Miscellaneous,#miscellaneous,internal_anchor,Table of Contents
+Improving Performance,#improving-performance,internal_anchor,Table of Contents
+Translating this documentation,#translating-this-documentation,internal_anchor,Table of Contents
+Beautiful Soup 3,#id16,internal_anchor,Table of Contents
+Porting code to BS4,#porting-code-to-bs4,internal_anchor,Table of Contents
+You need a parser,#you-need-a-parser,internal_anchor,Table of Contents
+Property names,#property-names,internal_anchor,Table of Contents
+Generators,#generators,internal_anchor,Table of Contents
+XML,#xml,internal_anchor,Table of Contents
+Entities,#entities,internal_anchor,Table of Contents
+Miscellaneous,#id17,internal_anchor,Table of Contents
+Sphinx 7.2.6,https://www.sphinx-doc.org/,external_link,Quick search
+Alabaster 0.7.16,https://alabaster.readthedocs.io,external_link,Quick search
+Page source,_sources/index.rst.txt,external_link,Quick search

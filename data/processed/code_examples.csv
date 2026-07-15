@@ -1,0 +1,1616 @@
+example_id,section_title,code_text,line_count,contains_find_all,contains_find,contains_select,contains_get_text,contains_requests
+0,Quick Start,"html_doc = """"""<html><head><title>The Dormouse's story</title></head>
+<body>
+<p class=""title""><b>The Dormouse's story</b></p>
+
+<p class=""story"">Once upon a time there were three little sisters; and their names were
+<a href=""http://example.com/elsie"" class=""sister"" id=""link1"">Elsie</a>,
+<a href=""http://example.com/lacie"" class=""sister"" id=""link2"">Lacie</a> and
+<a href=""http://example.com/tillie"" class=""sister"" id=""link3"">Tillie</a>;
+and they lived at the bottom of a well.</p>
+
+<p class=""story"">...</p>
+""""""
+",10,False,False,False,False,False
+1,Quick Start,"from bs4 import BeautifulSoup
+soup = BeautifulSoup(html_doc, 'html.parser')
+
+print(soup.prettify())
+# <html>
+#  <head>
+#   <title>
+#    The Dormouse's story
+#   </title>
+#  </head>
+#  <body>
+#   <p class=""title"">
+#    <b>
+#     The Dormouse's story
+#    </b>
+#   </p>
+#   <p class=""story"">
+#    Once upon a time there were three little sisters; and their names were
+#    <a class=""sister"" href=""http://example.com/elsie"" id=""link1"">
+#     Elsie
+#    </a>
+#    ,
+#    <a class=""sister"" href=""http://example.com/lacie"" id=""link2"">
+#     Lacie
+#    </a>
+#    and
+#    <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">
+#     Tillie
+#    </a>
+#    ; and they lived at the bottom of a well.
+#   </p>
+#   <p class=""story"">
+#    ...
+#   </p>
+#  </body>
+# </html>
+",35,False,False,False,False,False
+2,Quick Start,"soup.title
+# <title>The Dormouse's story</title>
+
+soup.title.name
+# u'title'
+
+soup.title.string
+# u'The Dormouse's story'
+
+soup.title.parent.name
+# u'head'
+
+soup.p
+# <p class=""title""><b>The Dormouse's story</b></p>
+
+soup.p['class']
+# u'title'
+
+soup.a
+# <a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>
+
+soup.find_all('a')
+# [<a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>,
+#  <a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>,
+#  <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>]
+
+soup.find(id=""link3"")
+# <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>
+",20,True,True,False,False,False
+3,Quick Start,"for link in soup.find_all('a'):
+    print(link.get('href'))
+# http://example.com/elsie
+# http://example.com/lacie
+# http://example.com/tillie
+",5,True,False,False,False,False
+4,Quick Start,"print(soup.get_text())
+# The Dormouse's story
+#
+# The Dormouse's story
+#
+# Once upon a time there were three little sisters; and their names were
+# Elsie,
+# Lacie and
+# Tillie;
+# and they lived at the bottom of a well.
+#
+# ...
+",12,False,False,False,True,False
+5,Making the soup,"from bs4 import BeautifulSoup
+
+with open(""index.html"") as fp:
+    soup = BeautifulSoup(fp, 'html.parser')
+
+soup = BeautifulSoup(""<html>a web page</html>"", 'html.parser')
+",4,False,False,False,False,False
+6,Making the soup,"print(BeautifulSoup(""<html><head></head><body>Sacr&eacute; bleu!</body></html>"", ""html.parser""))
+# <html><head></head><body>Sacré bleu!</body></html>
+",2,False,False,False,False,False
+7,Kinds of objects,"soup = BeautifulSoup('<b class=""boldest"">Extremely bold</b>', 'html.parser')
+tag = soup.b
+type(tag)
+# <class 'bs4.element.Tag'>
+",4,False,False,False,False,False
+8,Kinds of objects,"tag.name
+# 'b'
+",2,False,False,False,False,False
+9,Kinds of objects,"tag.name = ""blockquote""
+tag
+# <blockquote class=""boldest"">Extremely bold</blockquote>
+",3,False,False,False,False,False
+10,Kinds of objects,"tag = BeautifulSoup('<b id=""boldest"">bold</b>', 'html.parser').b
+tag['id']
+# 'boldest'
+",3,False,False,False,False,False
+11,Kinds of objects,"tag.attrs
+# {'id': 'boldest'}
+tag.attrs.keys()
+# dict_keys(['id'])
+",4,False,False,False,False,False
+12,Kinds of objects,"tag['id'] = 'verybold'
+tag['another-attribute'] = 1
+tag
+# <b another-attribute=""1"" id=""verybold""></b>
+
+del tag['id']
+del tag['another-attribute']
+tag
+# <b>bold</b>
+
+tag['id']
+# KeyError: 'id'
+tag.get('id')
+# None
+",12,False,False,False,False,False
+13,Multi-valued attributes,"css_soup = BeautifulSoup('<p class=""body""></p>', 'html.parser')
+css_soup.p['class']
+# ['body']
+
+css_soup = BeautifulSoup('<p class=""body strikeout""></p>', 'html.parser')
+css_soup.p['class']
+# ['body', 'strikeout']
+",6,False,False,False,False,False
+14,Multi-valued attributes,"rel_soup = BeautifulSoup('<p>Back to the <a rel=""index first"">homepage</a></p>', 'html.parser')
+rel_soup.a['rel']
+# ['index', 'first']
+rel_soup.a['rel'] = ['index', 'contents']
+print(rel_soup.p)
+# <p>Back to the <a rel=""index contents"">homepage</a></p>
+",6,False,False,False,False,False
+15,Multi-valued attributes,"id_soup = BeautifulSoup('<p id=""my id""></p>', 'html.parser')
+id_soup.p['id']
+# 'my id'
+",3,False,False,False,False,False
+16,Multi-valued attributes,"no_list_soup = BeautifulSoup('<p class=""body strikeout""></p>', 'html.parser', multi_valued_attributes=None)
+no_list_soup.p['class']
+# 'body strikeout'
+",3,False,False,False,False,False
+17,Multi-valued attributes,"id_soup.p['id']
+# 'my id'
+id_soup.p.get_attribute_list('id')
+# [""my id""]
+",4,False,False,False,False,False
+18,Multi-valued attributes,"xml_soup = BeautifulSoup('<p class=""body strikeout""></p>', 'xml')
+xml_soup.p['class']
+# 'body strikeout'
+",3,False,False,False,False,False
+19,Multi-valued attributes,"class_is_multi= { '*' : 'class'}
+xml_soup = BeautifulSoup('<p class=""body strikeout""></p>', 'xml', multi_valued_attributes=class_is_multi)
+xml_soup.p['class']
+# ['body', 'strikeout']
+",4,False,False,False,False,False
+20,Multi-valued attributes,"from bs4.builder import builder_registry
+builder_registry.lookup('html').DEFAULT_CDATA_LIST_ATTRIBUTES
+",2,False,False,False,False,False
+21,Multi-valued attributes,"soup = BeautifulSoup('<b class=""boldest"">Extremely bold</b>', 'html.parser')
+tag = soup.b
+tag.string
+# 'Extremely bold'
+type(tag.string)
+# <class 'bs4.element.NavigableString'>
+",6,False,False,False,False,False
+22,Multi-valued attributes,"unicode_string = str(tag.string)
+unicode_string
+# 'Extremely bold'
+type(unicode_string)
+# <type 'str'>
+",5,False,False,False,False,False
+23,Multi-valued attributes,"tag.string.replace_with(""No longer bold"")
+tag
+# <b class=""boldest"">No longer bold</b>
+",3,False,False,False,False,False
+24,Multi-valued attributes,"doc = BeautifulSoup(""<document><content/>INSERT FOOTER HERE</document"", ""xml"")
+footer = BeautifulSoup(""<footer>Here's the footer</footer>"", ""xml"")
+doc.find(text=""INSERT FOOTER HERE"").replace_with(footer)
+# 'INSERT FOOTER HERE'
+print(doc)
+# <?xml version=""1.0"" encoding=""utf-8""?>
+# <document><content/><footer>Here's the footer</footer></document>
+",7,False,True,False,False,False
+25,Multi-valued attributes,"soup.name
+# '[document]'
+",2,False,False,False,False,False
+26,Special strings,"markup = ""<b><!--Hey, buddy. Want to buy a used parser?--></b>""
+soup = BeautifulSoup(markup, 'html.parser')
+comment = soup.b.string
+type(comment)
+# <class 'bs4.element.Comment'>
+",5,False,False,False,False,False
+27,Special strings,"comment
+# 'Hey, buddy. Want to buy a used parser'
+",2,False,False,False,False,False
+28,Special strings,"print(soup.b.prettify())
+# <b>
+#  <!--Hey, buddy. Want to buy a used parser?-->
+# </b>
+",4,False,False,False,False,False
+29,Navigating the tree,"html_doc = """"""
+<html><head><title>The Dormouse's story</title></head>
+<body>
+<p class=""title""><b>The Dormouse's story</b></p>
+
+<p class=""story"">Once upon a time there were three little sisters; and their names were
+<a href=""http://example.com/elsie"" class=""sister"" id=""link1"">Elsie</a>,
+<a href=""http://example.com/lacie"" class=""sister"" id=""link2"">Lacie</a> and
+<a href=""http://example.com/tillie"" class=""sister"" id=""link3"">Tillie</a>;
+and they lived at the bottom of a well.</p>
+
+<p class=""story"">...</p>
+""""""
+
+from bs4 import BeautifulSoup
+soup = BeautifulSoup(html_doc, 'html.parser')
+",13,False,False,False,False,False
+30,Navigating using tag names,"soup.find(""head"")
+# <head><title>The Dormouse's story</title></head>
+",2,False,True,False,False,False
+31,Navigating using tag names,"soup.head
+# <head><title>The Dormouse's story</title></head>
+
+soup.title
+# <title>The Dormouse's story</title>
+",4,False,False,False,False,False
+32,Navigating using tag names,"soup.body.b
+# <b>The Dormouse's story</b>
+",2,False,False,False,False,False
+33,Navigating using tag names,"soup.a
+# <a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>
+",2,False,False,False,False,False
+34,Navigating using tag names,"soup.find_all('a')
+# [<a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>,
+#  <a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>,
+#  <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>]
+",4,True,False,False,False,False
+35,.contentsand.children,"head_tag = soup.head
+head_tag
+# <head><title>The Dormouse's story</title></head>
+
+head_tag.contents
+# [<title>The Dormouse's story</title>]
+
+title_tag = head_tag.contents[0]
+title_tag
+# <title>The Dormouse's story</title>
+title_tag.contents
+# ['The Dormouse's story']
+",10,False,False,False,False,False
+36,.contentsand.children,"len(soup.contents)
+# 1
+soup.contents[0].name
+# 'html'
+",4,False,False,False,False,False
+37,.contentsand.children,"text = title_tag.contents[0]
+text.contents
+# AttributeError: 'NavigableString' object has no attribute 'contents'
+",3,False,False,False,False,False
+38,.contentsand.children,"for child in title_tag.children:
+    print(child)
+# The Dormouse's story
+",3,False,False,False,False,False
+39,.descendants,"head_tag.contents
+# [<title>The Dormouse's story</title>]
+",2,False,False,False,False,False
+40,.descendants,"for child in head_tag.descendants:
+    print(child)
+# <title>The Dormouse's story</title>
+# The Dormouse's story
+",4,False,False,False,False,False
+41,.descendants,"len(list(soup.children))
+# 1
+len(list(soup.descendants))
+# 26
+",4,False,False,False,False,False
+42,.string,"title_tag.string
+# 'The Dormouse's story'
+",2,False,False,False,False,False
+43,.string,"head_tag.contents
+# [<title>The Dormouse's story</title>]
+
+head_tag.string
+# 'The Dormouse's story'
+",4,False,False,False,False,False
+44,.string,"print(soup.html.string)
+# None
+",2,False,False,False,False,False
+45,.stringsandstripped_strings,"for string in soup.strings:
+    print(repr(string))
+    '\n'
+# ""The Dormouse's story""
+# '\n'
+# '\n'
+# ""The Dormouse's story""
+# '\n'
+# 'Once upon a time there were three little sisters; and their names were\n'
+# 'Elsie'
+# ',\n'
+# 'Lacie'
+# ' and\n'
+# 'Tillie'
+# ';\nand they lived at the bottom of a well.'
+# '\n'
+# '...'
+# '\n'
+",18,False,False,False,False,False
+46,.stringsandstripped_strings,"for string in soup.stripped_strings:
+    print(repr(string))
+# ""The Dormouse's story""
+# ""The Dormouse's story""
+# 'Once upon a time there were three little sisters; and their names were'
+# 'Elsie'
+# ','
+# 'Lacie'
+# 'and'
+# 'Tillie'
+# ';\n and they lived at the bottom of a well.'
+# '...'
+",12,False,False,False,False,False
+47,.parent,"title_tag = soup.title
+title_tag
+# <title>The Dormouse's story</title>
+title_tag.parent
+# <head><title>The Dormouse's story</title></head>
+",5,False,False,False,False,False
+48,.parent,"title_tag.string.parent
+# <title>The Dormouse's story</title>
+",2,False,False,False,False,False
+49,.parent,"html_tag = soup.html
+type(html_tag.parent)
+# <class 'bs4.BeautifulSoup'>
+",3,False,False,False,False,False
+50,.parent,"print(soup.parent)
+# None
+",2,False,False,False,False,False
+51,.parents,"link = soup.a
+link
+# <a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>
+for parent in link.parents:
+    print(parent.name)
+# p
+# body
+# html
+# [document]
+",9,False,False,False,False,False
+52,.self_and_parents,"for tag in link.self_and_parents:
+    print(tag.name)
+# link
+# p
+# body
+# html
+# [document]
+",7,False,False,False,False,False
+53,Going sideways,"sibling_soup = BeautifulSoup(""<a><b>text1</b><c>text2</c></a>"", 'html.parser')
+print(sibling_soup.prettify())
+#   <a>
+#    <b>
+#     text1
+#    </b>
+#    <c>
+#     text2
+#    </c>
+#   </a>
+",10,False,False,False,False,False
+54,.next_siblingand.previous_sibling,"sibling_soup.b.next_sibling
+# <c>text2</c>
+
+sibling_soup.c.previous_sibling
+# <b>text1</b>
+",4,False,False,False,False,False
+55,.next_siblingand.previous_sibling,"print(sibling_soup.b.previous_sibling)
+# None
+print(sibling_soup.c.next_sibling)
+# None
+",4,False,False,False,False,False
+56,.next_siblingand.previous_sibling,"sibling_soup.b.string
+# 'text1'
+
+print(sibling_soup.b.string.next_sibling)
+# None
+",4,False,False,False,False,False
+57,.next_siblingand.previous_sibling,"# <a href=""http://example.com/elsie"" class=""sister"" id=""link1"">Elsie</a>,
+# <a href=""http://example.com/lacie"" class=""sister"" id=""link2"">Lacie</a> and
+# <a href=""http://example.com/tillie"" class=""sister"" id=""link3"">Tillie</a>;
+",3,False,False,False,False,False
+58,.next_siblingand.previous_sibling,"link = soup.a
+link
+# <a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>
+
+link.next_sibling
+# ',\n '
+",5,False,False,False,False,False
+59,.next_siblingand.previous_sibling,"link.next_sibling.next_sibling
+# <a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>
+",2,False,False,False,False,False
+60,.next_siblingsand.previous_siblings,"for sibling in soup.a.next_siblings:
+    print(repr(sibling))
+# ',\n'
+# <a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>
+# ' and\n'
+# <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>
+# '; and they lived at the bottom of a well.'
+
+for sibling in soup.find(id=""link3"").previous_siblings:
+    print(repr(sibling))
+# ' and\n'
+# <a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>
+# ',\n'
+# <a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>
+# 'Once upon a time there were three little sisters; and their names were\n'
+",14,False,True,False,False,False
+61,Going back and forth,"# <html><head><title>The Dormouse's story</title></head>
+# <p class=""title""><b>The Dormouse's story</b></p>
+",2,False,False,False,False,False
+62,.next_elementand.previous_element,"last_a_tag = soup.find(""a"", id=""link3"")
+last_a_tag
+# <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>
+
+last_a_tag.next_sibling
+# ';\nand they lived at the bottom of a well.'
+",5,False,True,False,False,False
+63,.next_elementand.previous_element,"last_a_tag.next_element
+# 'Tillie'
+",2,False,False,False,False,False
+64,.next_elementand.previous_element,"last_a_tag.previous_element
+# ' and\n'
+last_a_tag.previous_element.next_element
+# <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>
+",4,False,False,False,False,False
+65,.next_elementsand.previous_elements,"for element in last_a_tag.next_elements:
+    print(repr(element))
+# 'Tillie'
+# ';\nand they lived at the bottom of a well.'
+# '\n'
+# <p class=""story"">...</p>
+# '...'
+# '\n'
+",8,False,False,False,False,False
+66,Searching the tree,"html_doc = """"""
+<html><head><title>The Dormouse's story</title></head>
+<body>
+<p class=""title""><b>The Dormouse's story</b></p>
+
+<p class=""story"">Once upon a time there were three little sisters; and their names were
+<a href=""http://example.com/elsie"" class=""sister"" id=""link1"">Elsie</a>,
+<a href=""http://example.com/lacie"" class=""sister"" id=""link2"">Lacie</a> and
+<a href=""http://example.com/tillie"" class=""sister"" id=""link3"">Tillie</a>;
+and they lived at the bottom of a well.</p>
+
+<p class=""story"">...</p>
+""""""
+
+from bs4 import BeautifulSoup
+soup = BeautifulSoup(html_doc, 'html.parser')
+",13,False,False,False,False,False
+67,A string,"soup.find_all('b')
+# [<b>The Dormouse's story</b>]
+",2,True,False,False,False,False
+68,A regular expression,"import re
+for tag in soup.find_all(re.compile(""^b"")):
+    print(tag.name)
+# body
+# b
+",5,True,False,False,False,False
+69,A regular expression,"for tag in soup.find_all(re.compile(""t"")):
+    print(tag.name)
+# html
+# title
+",4,True,False,False,False,False
+70,True,"for tag in soup.find_all(True):
+    print(tag.name)
+# html
+# head
+# title
+# body
+# p
+# b
+# p
+# a
+# a
+# a
+# p
+",13,True,False,False,False,False
+71,A function,"def has_class_but_no_id(tag):
+    return tag.has_attr('class') and not tag.has_attr('id')
+",2,False,False,False,False,False
+72,A function,"soup.find_all(has_class_but_no_id)
+# [<p class=""title""><b>The Dormouse's story</b></p>,
+#  <p class=""story"">Once upon a time there were…bottom of a well.</p>,
+#  <p class=""story"">...</p>]
+",4,True,False,False,False,False
+73,A function,"from bs4 import NavigableString
+def surrounded_by_strings(tag):
+    return (isinstance(tag.next_element, NavigableString)
+            and isinstance(tag.previous_element, NavigableString))
+
+for tag in soup.find_all(surrounded_by_strings):
+    print(tag.name)
+# body
+# p
+# a
+# a
+# a
+# p
+",12,True,False,False,False,False
+74,A list,"soup.find_all([""a"", ""b""])
+# [<b>The Dormouse's story</b>,
+#  <a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>,
+#  <a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>,
+#  <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>]
+",5,True,False,False,False,False
+75,find_all(),"soup.find_all(""title"")
+# [<title>The Dormouse's story</title>]
+
+soup.find_all(""p"", ""title"")
+# [<p class=""title""><b>The Dormouse's story</b></p>]
+
+soup.find_all(""a"")
+# [<a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>,
+#  <a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>,
+#  <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>]
+
+soup.find_all(id=""link2"")
+# [<a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>]
+
+import re
+soup.find(string=re.compile(""sisters""))
+# 'Once upon a time there were three little sisters; and their names were\n'
+",13,True,True,False,False,False
+76,Thenameargument,"soup.find_all(""title"")
+# [<title>The Dormouse's story</title>]
+",2,True,False,False,False,False
+77,The keyword arguments,"soup.find_all(id='link2')
+# [<a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>]
+",2,True,False,False,False,False
+78,The keyword arguments,"soup.find_all(href=re.compile(""elsie""))
+# [<a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>]
+",2,True,False,False,False,False
+79,The keyword arguments,"soup.find_all(id=True)
+# [<a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>,
+#  <a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>,
+#  <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>]
+",4,True,False,False,False,False
+80,The keyword arguments,"import re
+def not_lacie(href):
+    return href and not re.compile(""lacie"").search(href)
+
+soup.find_all(href=not_lacie)
+# [<a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>,
+#  <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>]
+",6,True,False,False,False,False
+81,The keyword arguments,"soup.find_all(id=[""link1"", re.compile(""3$"")])
+# [<a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>,
+#  <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>]
+",3,True,False,False,False,False
+82,The keyword arguments,"soup.find_all(href=re.compile(""elsie""), id='link1')
+# [<a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>]
+",2,True,False,False,False,False
+83,The keyword arguments,"data_soup = BeautifulSoup('<div data-foo=""value"">foo!</div>', 'html.parser')
+data_soup.find_all(data-foo=""value"")
+# SyntaxError: keyword can't be an expression
+",3,True,False,False,False,False
+84,The keyword arguments,"data_soup.find_all(attrs={""data-foo"": ""value""})
+# [<div data-foo=""value"">foo!</div>]
+",2,True,False,False,False,False
+85,The keyword arguments,"name_soup = BeautifulSoup('<input name=""email""/>', 'html.parser')
+name_soup.find_all(name=""email"")
+# []
+name_soup.find_all(attrs={""name"": ""email""})
+# [<input name=""email""/>]
+",5,True,False,False,False,False
+86,Searching by CSS class,"soup.find_all(""a"", class_=""sister"")
+# [<a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>,
+#  <a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>,
+#  <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>]
+",4,True,False,False,False,False
+87,Searching by CSS class,"soup.find_all(class_=re.compile(""itl""))
+# [<p class=""title""><b>The Dormouse's story</b></p>]
+
+def has_six_characters(css_class):
+    return css_class is not None and len(css_class) == 6
+
+soup.find_all(class_=has_six_characters)
+# [<a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>,
+#  <a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>,
+#  <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>]
+",8,True,False,False,False,False
+88,Searching by CSS class,"css_soup = BeautifulSoup('<p class=""body strikeout""></p>', 'html.parser')
+css_soup.find_all(""p"", class_=""strikeout"")
+# [<p class=""body strikeout""></p>]
+
+css_soup.find_all(""p"", class_=""body"")
+# [<p class=""body strikeout""></p>]
+",5,True,False,False,False,False
+89,Searching by CSS class,"css_soup.find_all(""p"", class_=""body strikeout"")
+# [<p class=""body strikeout""></p>]
+",2,True,False,False,False,False
+90,Searching by CSS class,"css_soup.find_all(""p"", class_=""strikeout body"")
+# []
+",2,True,False,False,False,False
+91,Searching by CSS class,"soup.find_all(""a"", attrs={""class"": ""sister""})
+# [<a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>,
+#  <a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>,
+#  <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>]
+",4,True,False,False,False,False
+92,Searching by CSS class,"css_soup.select(""p.strikeout.body"")
+# [<p class=""body strikeout""></p>]
+",2,False,False,True,False,False
+93,Thestringargument,"soup.find_all(string=""Elsie"")
+# ['Elsie']
+
+soup.find_all(string=[""Tillie"", ""Elsie"", ""Lacie""])
+# ['Elsie', 'Lacie', 'Tillie']
+
+soup.find_all(string=re.compile(""Dormouse""))
+# [""The Dormouse's story"", ""The Dormouse's story""]
+
+def is_the_only_string_within_a_tag(s):
+    """"""Return True if this string is the only child of its parent tag.""""""
+    return (s == s.parent.string)
+
+soup.find_all(string=is_the_only_string_within_a_tag)
+# [""The Dormouse's story"", ""The Dormouse's story"", 'Elsie', 'Lacie', 'Tillie', '...']
+",11,True,False,False,False,False
+94,Thestringargument,"soup.find_all(""a"", string=""Elsie"")
+# [<a href=""http://example.com/elsie"" class=""sister"" id=""link1"">Elsie</a>]
+",2,True,False,False,False,False
+95,Thestringargument,"soup.find_all(""a"", text=""Elsie"")
+# [<a href=""http://example.com/elsie"" class=""sister"" id=""link1"">Elsie</a>]
+",2,True,False,False,False,False
+96,Thelimitargument,"soup.find_all(""a"", limit=2)
+# [<a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>,
+#  <a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>]
+",3,True,False,False,False,False
+97,Therecursiveargument,"soup.html.find_all(""title"")
+# [<title>The Dormouse's story</title>]
+
+soup.html.find_all(""title"", recursive=False)
+# []
+",4,True,False,False,False,False
+98,Therecursiveargument,"<html>
+ <head>
+  <title>
+   The Dormouse's story
+  </title>
+ </head>
+...
+",7,False,False,False,False,False
+99,Calling a tag is like callingfind_all(),"soup.find_all(""a"")
+soup(""a"")
+",2,True,False,False,False,False
+100,Calling a tag is like callingfind_all(),"soup.title.find_all(string=True)
+soup.title(string=True)
+",2,True,False,False,False,False
+101,find(),"soup.find_all('title', limit=1)
+# [<title>The Dormouse's story</title>]
+
+soup.find('title')
+# <title>The Dormouse's story</title>
+",4,True,True,False,False,False
+102,find(),"print(soup.find(""nosuchtag""))
+# None
+",2,False,True,False,False,False
+103,find(),"soup.head.title
+# <title>The Dormouse's story</title>
+
+soup.find(""head"").find(""title"")
+# <title>The Dormouse's story</title>
+",4,False,True,False,False,False
+104,find_parents()andfind_parent(),"a_string = soup.find(string=""Lacie"")
+a_string
+# 'Lacie'
+
+a_string.find_parents(""a"")
+# [<a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>]
+
+a_string.find_parent(""p"")
+# <p class=""story"">Once upon a time there were three little sisters; and their names were
+#  <a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>,
+#  <a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a> and
+#  <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>;
+#  and they lived at the bottom of a well.</p>
+
+a_string.find_parents(""p"", class_=""title"")
+# []
+",13,False,True,False,False,False
+105,find_next_siblings()andfind_next_sibling(),"first_link = soup.a
+first_link
+# <a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>
+
+first_link.find_next_siblings(""a"")
+# [<a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>,
+#  <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>]
+
+first_story_paragraph = soup.find(""p"", ""story"")
+first_story_paragraph.find_next_sibling(""p"")
+# <p class=""story"">...</p>
+",9,False,True,False,False,False
+106,find_previous_siblings()andfind_previous_sibling(),"last_link = soup.find(""a"", id=""link3"")
+last_link
+# <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>
+
+last_link.find_previous_siblings(""a"")
+# [<a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>,
+#  <a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>]
+
+first_story_paragraph = soup.find(""p"", ""story"")
+first_story_paragraph.find_previous_sibling(""p"")
+# <p class=""title""><b>The Dormouse's story</b></p>
+",9,False,True,False,False,False
+107,find_all_next()andfind_next(),"first_link = soup.a
+first_link
+# <a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>
+
+first_link.find_all_next(string=True)
+# ['Elsie', ',\n', 'Lacie', ' and\n', 'Tillie',
+#  ';\nand they lived at the bottom of a well.', '\n', '...', '\n']
+
+first_link.find_next(""p"")
+# <p class=""story"">...</p>
+",8,True,False,False,False,False
+108,find_all_previous()andfind_previous(),"first_link = soup.a
+first_link
+# <a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>
+
+first_link.find_all_previous(""p"")
+# [<p class=""story"">Once upon a time there were three little sisters; ...</p>,
+#  <p class=""title""><b>The Dormouse's story</b></p>]
+
+first_link.find_previous(""title"")
+# <title>The Dormouse's story</title>
+",8,True,False,False,False,False
+109,CSS selectors through the.cssproperty,"soup.css.select(""title"")
+# [<title>The Dormouse's story</title>]
+
+soup.css.select(""p:nth-of-type(3)"")
+# [<p class=""story"">...</p>]
+",4,False,False,True,False,False
+110,CSS selectors through the.cssproperty,"soup.css.select(""#link1"")
+# [<a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>]
+
+soup.css.select(""a#link2"")
+# [<a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>]
+",4,False,False,True,False,False
+111,CSS selectors through the.cssproperty,"soup.css.select(""body a"")
+# [<a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>,
+#  <a class=""sister"" href=""http://example.com/lacie""  id=""link2"">Lacie</a>,
+#  <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>]
+
+soup.css.select(""html head title"")
+# [<title>The Dormouse's story</title>]
+",6,False,False,True,False,False
+112,CSS selectors through the.cssproperty,"soup.css.select(""head > title"")
+# [<title>The Dormouse's story</title>]
+
+soup.css.select(""p > a"")
+# [<a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>,
+#  <a class=""sister"" href=""http://example.com/lacie""  id=""link2"">Lacie</a>,
+#  <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>]
+
+soup.css.select(""p > a:nth-of-type(2)"")
+# [<a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>]
+
+soup.css.select(""body > a"")
+# []
+",10,False,False,True,False,False
+113,CSS selectors through the.cssproperty,"soup.css.select(""#link1 ~ .sister"")
+# [<a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>,
+#  <a class=""sister"" href=""http://example.com/tillie""  id=""link3"">Tillie</a>]
+",3,False,False,True,False,False
+114,CSS selectors through the.cssproperty,"soup.css.select(""#link1 + .sister"")
+# [<a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>]
+",2,False,False,True,False,False
+115,CSS selectors through the.cssproperty,"soup.css.select("".sister"")
+# [<a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>,
+#  <a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>,
+#  <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>]
+
+soup.css.select(""[class~=sister]"")
+# [<a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>,
+#  <a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>,
+#  <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>]
+",8,False,False,True,False,False
+116,CSS selectors through the.cssproperty,"soup.css.select(""#link1,#link2"")
+# [<a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>,
+#  <a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>]
+",3,False,False,True,False,False
+117,CSS selectors through the.cssproperty,"soup.css.select('a[href]')
+# [<a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>,
+#  <a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>,
+#  <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>]
+",4,False,False,True,False,False
+118,CSS selectors through the.cssproperty,"soup.css.select('a[href=""http://example.com/elsie""]')
+# [<a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>]
+
+soup.css.select('a[href^=""http://example.com/""]')
+# [<a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>,
+#  <a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a>,
+#  <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>]
+
+soup.css.select('a[href$=""tillie""]')
+# [<a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>]
+
+soup.css.select('a[href*="".com/el""]')
+# [<a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>]
+",10,False,False,True,False,False
+119,CSS selectors through the.cssproperty,"soup.css.select_one("".sister"")
+# <a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>
+",2,False,False,False,False,False
+120,CSS selectors through the.cssproperty,"soup.select('a[href$=""tillie""]')
+# [<a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>]
+
+soup.select_one("".sister"")
+# <a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>
+",4,False,False,True,False,False
+121,Advanced Soup Sieve features,"[tag['id'] for tag in soup.css.iselect("".sister"")]
+# ['link1', 'link2', 'link3']
+",2,False,False,False,False,False
+122,Advanced Soup Sieve features,"elsie = soup.css.select_one("".sister"")
+elsie.css.closest(""p.story"")
+# <p class=""story"">Once upon a time there were three little sisters; and their names were
+#  <a class=""sister"" href=""http://example.com/elsie"" id=""link1"">Elsie</a>,
+#  <a class=""sister"" href=""http://example.com/lacie"" id=""link2"">Lacie</a> and
+#  <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">Tillie</a>;
+#  and they lived at the bottom of a well.</p>
+",7,False,False,False,False,False
+123,Advanced Soup Sieve features,"# elsie.css.match(""#link1"")
+True
+
+# elsie.css.match(""#link2"")
+False
+",4,False,False,False,False,False
+124,Advanced Soup Sieve features,"[tag.string for tag in soup.find('p', 'story').css.filter('a')]
+# ['Elsie', 'Lacie', 'Tillie']
+",2,False,True,False,False,False
+125,Advanced Soup Sieve features,"soup.css.escape(""1-strange-identifier"")
+# '\\31 -strange-identifier'
+",2,False,False,False,False,False
+126,Namespaces in CSS selectors,"from bs4 import BeautifulSoup
+xml = """"""<tag xmlns:ns1=""http://namespace1/"" xmlns:ns2=""http://namespace2/"">
+ <ns1:child>I'm in namespace 1</ns1:child>
+ <ns2:child>I'm in namespace 2</ns2:child>
+</tag> """"""
+namespace_soup = BeautifulSoup(xml, ""xml"")
+
+namespace_soup.css.select(""child"")
+# [<ns1:child>I'm in namespace 1</ns1:child>, <ns2:child>I'm in namespace 2</ns2:child>]
+
+namespace_soup.css.select(""ns1|child"")
+# [<ns1:child>I'm in namespace 1</ns1:child>]
+",10,False,False,True,False,False
+127,Namespaces in CSS selectors,"namespaces = dict(first=""http://namespace1/"", second=""http://namespace2/"")
+namespace_soup.css.select(""second|child"", namespaces=namespaces)
+# [<ns1:child>I'm in namespace 2</ns1:child>]
+",3,False,False,True,False,False
+128,Changing tag names and attributes,"soup = BeautifulSoup('<b class=""boldest"">Extremely bold</b>', 'html.parser')
+tag = soup.b
+
+tag.name = ""blockquote""
+tag['class'] = 'verybold'
+tag['id'] = 1
+tag
+# <blockquote class=""verybold"" id=""1"">Extremely bold</blockquote>
+
+del tag['class']
+del tag['id']
+tag
+# <blockquote>Extremely bold</blockquote>
+",11,False,False,False,False,False
+129,Modifying.string,"markup = '<a href=""http://example.com/"">I linked to <i>example.com</i></a>'
+soup = BeautifulSoup(markup, 'html.parser')
+
+tag = soup.a
+tag.string = ""New link text.""
+tag
+# <a href=""http://example.com/"">New link text.</a>
+",6,False,False,False,False,False
+130,append(),"soup = BeautifulSoup(""<a>Foo</a>"", 'html.parser')
+new_string = soup.a.append(""Bar"")
+
+soup
+# <a>FooBar</a>
+soup.a.contents
+# ['Foo', 'Bar']
+new_string
+# 'Bar'
+",8,False,False,False,False,False
+131,extend(),"soup = BeautifulSoup(""<a>Soup</a>"", 'html.parser')
+soup.a.extend([""'s"", "" "", ""on""])
+
+soup
+# <a>Soup's on</a>
+soup.a.contents
+# ['Soup', ''s', ' ', 'on']
+",6,False,False,False,False,False
+132,NavigableString()and.new_tag(),"from bs4 import NavigableString
+soup = BeautifulSoup(""<b></b>"", 'html.parser')
+tag = soup.b
+tag.append(""Hello"")
+new_string = NavigableString("" there"")
+tag.append(new_string)
+tag
+# <b>Hello there.</b>
+tag.contents
+# ['Hello', ' there']
+",10,False,False,False,False,False
+133,NavigableString()and.new_tag(),"from bs4 import Comment
+new_comment = Comment(""Nice to see you."")
+tag.append(new_comment)
+tag
+# <b>Hello there<!--Nice to see you.--></b>
+tag.contents
+# ['Hello', ' there', 'Nice to see you.']
+",7,False,False,False,False,False
+134,NavigableString()and.new_tag(),"soup = BeautifulSoup(""<b></b>"", 'html.parser')
+original_tag = soup.b
+
+new_tag = soup.new_tag(""a"", href=""http://www.example.com"", string=""Link text."")
+original_tag.append(new_tag)
+original_tag
+# <b><a href=""http://www.example.com"">Link text.</a></b>
+",6,False,False,False,False,False
+135,NavigableString()and.new_tag(),"soup = BeautifulSoup(""<html></html>"", 'html.parser')
+html = soup.html
+
+title = html.append(soup.new_tag(""title""))
+",3,False,False,False,False,False
+136,insert(),"markup = '<a href=""http://example.com/"">I linked to <i>example.com</i></a>'
+soup = BeautifulSoup(markup, 'html.parser')
+tag = soup.a
+
+new_string = tag.insert(1, ""but did not endorse "")
+tag
+# <a href=""http://example.com/"">I linked to but did not endorse <i>example.com</i></a>
+tag.contents
+# ['I linked to ', 'but did not endorse ', <i>example.com</i>]
+new_string
+# 'but did not endorse '
+",10,False,False,False,False,False
+137,insert_before()andinsert_after(),"soup = BeautifulSoup(""<b>leave</b>"", 'html.parser')
+tag = soup.new_tag(""i"")
+tag.string = ""Don't""
+soup.b.string.insert_before(tag)
+soup.b
+# <b><i>Don't</i>leave</b>
+",6,False,False,False,False,False
+138,insert_before()andinsert_after(),"div = soup.new_tag('div')
+div.string = 'ever'
+soup.b.i.insert_after("" you "", div)
+soup.b
+# <b><i>Don't</i> you <div>ever</div> leave</b>
+soup.b.contents
+# [<i>Don't</i>, ' you', <div>ever</div>, 'leave']
+",7,False,False,False,False,False
+139,clear(),"markup = '<a href=""http://example.com/"">I linked to <i>example.com</i></a>'
+soup = BeautifulSoup(markup, 'html.parser')
+tag = soup.a
+
+tag.clear()
+tag
+# <a href=""http://example.com/""></a>
+",6,False,False,False,False,False
+140,extract(),"markup = '<a href=""http://example.com/"">I linked to <i>example.com</i></a>'
+soup = BeautifulSoup(markup, 'html.parser')
+a_tag = soup.a
+
+i_tag = soup.i.extract()
+
+a_tag
+# <a href=""http://example.com/"">I linked to</a>
+
+i_tag
+# <i>example.com</i>
+
+print(i_tag.parent)
+# None
+",10,False,False,False,False,False
+141,extract(),"my_string = i_tag.string.extract()
+my_string
+# 'example.com'
+
+print(my_string.parent)
+# None
+i_tag
+# <i></i>
+",7,False,False,False,False,False
+142,decompose(),"markup = '<a href=""http://example.com/"">I linked to <i>example.com</i></a>'
+soup = BeautifulSoup(markup, 'html.parser')
+a_tag = soup.a
+i_tag = soup.i
+
+i_tag.decompose()
+a_tag
+# <a href=""http://example.com/"">I linked to</a>
+",7,False,False,False,False,False
+143,decompose(),"i_tag.decomposed
+# True
+
+a_tag.decomposed
+# False
+",4,False,False,False,False,False
+144,replace_with(),"markup = '<a href=""http://example.com/"">I linked to <i>example.com</i></a>'
+soup = BeautifulSoup(markup, 'html.parser')
+a_tag = soup.a
+
+new_tag = soup.new_tag(""b"")
+new_tag.string = ""example.com""
+a_tag.i.replace_with(new_tag)
+
+a_tag
+# <a href=""http://example.com/"">I linked to <b>example.com</b></a>
+
+bold_tag = soup.new_tag(""b"")
+bold_tag.string = ""example""
+i_tag = soup.new_tag(""i"")
+i_tag.string = ""net""
+a_tag.b.replace_with(bold_tag, ""."", i_tag)
+
+a_tag
+# <a href=""http://example.com/"">I linked to <b>example</b>.<i>net</i></a>
+",15,False,False,False,False,False
+145,wrap(),"soup = BeautifulSoup(""<p>I wish I was bold.</p>"", 'html.parser')
+soup.p.string.wrap(soup.new_tag(""b""))
+# <b>I wish I was bold.</b>
+
+soup.p.wrap(soup.new_tag(""div""))
+# <div><p><b>I wish I was bold.</b></p></div>
+",5,False,False,False,False,False
+146,unwrap(),"markup = '<a href=""http://example.com/"">I linked to <i>example.com</i></a>'
+soup = BeautifulSoup(markup, 'html.parser')
+a_tag = soup.a
+
+a_tag.i.unwrap()
+a_tag
+# <a href=""http://example.com/"">I linked to example.com</a>
+",6,False,False,False,False,False
+147,smooth(),"soup = BeautifulSoup(""<p>A one</p>"", 'html.parser')
+soup.p.append("", a two"")
+
+soup.p.contents
+# ['A one', ', a two']
+
+print(soup.p.encode())
+# b'<p>A one, a two</p>'
+
+print(soup.p.prettify())
+# <p>
+#  A one
+#  , a two
+# </p>
+",11,False,False,False,False,False
+148,smooth(),"soup.smooth()
+
+soup.p.contents
+# ['A one, a two']
+
+print(soup.p.prettify())
+# <p>
+#  A one, a two
+# </p>
+",7,False,False,False,False,False
+149,Pretty-printing,"markup = '<html><head><body><a href=""http://example.com/"">I linked to <i>example.com</i></a>'
+soup = BeautifulSoup(markup, 'html.parser')
+soup.prettify()
+# '<html>\n <head>\n </head>\n <body>\n  <a href=""http://example.com/"">\n...'
+
+print(soup.prettify())
+# <html>
+#  <head>
+#  </head>
+#  <body>
+#   <a href=""http://example.com/"">
+#    I linked to
+#    <i>
+#     example.com
+#    </i>
+#   </a>
+#  </body>
+# </html>
+",17,False,False,False,False,False
+150,Pretty-printing,"print(soup.a.prettify())
+# <a href=""http://example.com/"">
+#  I linked to
+#  <i>
+#   example.com
+#  </i>
+# </a>
+",7,False,False,False,False,False
+151,Non-pretty printing,"str(soup)
+# '<html><head></head><body><a href=""http://example.com/"">I linked to <i>example.com</i></a></body></html>'
+
+str(soup.a)
+# '<a href=""http://example.com/"">I linked to <i>example.com</i></a>'
+",4,False,False,False,False,False
+152,Output formatters,"soup = BeautifulSoup(""&ldquo;Dammit!&rdquo; he said."", 'html.parser')
+str(soup)
+# '“Dammit!” he said.'
+",3,False,False,False,False,False
+153,Output formatters,"soup.encode(""utf8"")
+# b'\xe2\x80\x9cDammit!\xe2\x80\x9d he said.'
+",2,False,False,False,False,False
+154,Output formatters,"soup = BeautifulSoup(""<p>The law firm of Dewey, Cheatem, & Howe</p>"", 'html.parser')
+soup.p
+# <p>The law firm of Dewey, Cheatem, &amp; Howe</p>
+
+soup = BeautifulSoup('<a href=""http://example.com/?foo=val1&bar=val2"">A link</a>', 'html.parser')
+soup.a
+# <a href=""http://example.com/?foo=val1&amp;bar=val2"">A link</a>
+",6,False,False,False,False,False
+155,Output formatters,"french = ""<p>Il a dit &lt;&lt;Sacr&eacute; bleu!&gt;&gt;</p>""
+soup = BeautifulSoup(french, 'html.parser')
+print(soup.prettify(formatter=""minimal""))
+# <p>
+#  Il a dit &lt;&lt;Sacré bleu!&gt;&gt;
+# </p>
+",6,False,False,False,False,False
+156,Output formatters,"print(soup.prettify(formatter=""html""))
+# <p>
+#  Il a dit &lt;&lt;Sacr&eacute; bleu!&gt;&gt;
+# </p>
+",4,False,False,False,False,False
+157,Output formatters,"br = BeautifulSoup(""<br>"", 'html.parser').br
+
+print(br.encode(formatter=""html""))
+# b'<br/>'
+
+print(br.encode(formatter=""html5""))
+# b'<br>'
+",5,False,False,False,False,False
+158,Output formatters,"option = BeautifulSoup('<option selected=""""></option>').option
+print(option.encode(formatter=""html""))
+# b'<option selected=""""></option>'
+
+print(option.encode(formatter=""html5""))
+# b'<option selected></option>'
+",5,False,False,False,False,False
+159,Output formatters,"print(soup.prettify(formatter=None))
+# <p>
+#  Il a dit <<Sacré bleu!>>
+# </p>
+
+link_soup = BeautifulSoup('<a href=""http://example.com/?foo=val1&bar=val2"">A link</a>', 'html.parser')
+print(link_soup.a.encode(formatter=None))
+# b'<a href=""http://example.com/?foo=val1&bar=val2"">A link</a>'
+",7,False,False,False,False,False
+160,Formatter objects,"from bs4.formatter import HTMLFormatter
+def uppercase(str):
+    return str.upper()
+
+formatter = HTMLFormatter(uppercase)
+
+print(soup.prettify(formatter=formatter))
+# <p>
+#  IL A DIT <<SACRÉ BLEU!>>
+# </p>
+
+print(link_soup.a.prettify(formatter=formatter))
+# <a href=""HTTP://EXAMPLE.COM/?FOO=VAL1&BAR=VAL2"">
+#  A LINK
+# </a>
+",12,False,False,False,False,False
+161,Formatter objects,"formatter = HTMLFormatter(indent=8)
+print(link_soup.a.prettify(formatter=formatter))
+# <a href=""http://example.com/?foo=val1&bar=val2"">
+#         A link
+# </a>
+",5,False,False,False,False,False
+162,Writing your own formatter,"attr_soup = BeautifulSoup(b'<p z=""1"" m=""2"" a=""3""></p>', 'html.parser')
+print(attr_soup.p.encode())
+# <p a=""3"" m=""2"" z=""1""></p>
+",3,False,False,False,False,False
+163,Writing your own formatter,"class UnsortedAttributes(HTMLFormatter):
+    def attributes(self, tag):
+        for k, v in tag.attrs.items():
+            if k == 'm':
+                continue
+            yield k, v
+
+print(attr_soup.p.encode(formatter=UnsortedAttributes()))
+# <p z=""1"" a=""3""></p>
+",8,False,False,False,False,False
+164,Writing your own formatter,"from bs4.element import CData
+soup = BeautifulSoup(""<a></a>"", 'html.parser')
+soup.a.string = CData(""one < three"")
+print(soup.a.prettify(formatter=""html""))
+# <a>
+#  <![CDATA[one < three]]>
+# </a>
+",7,False,False,False,False,False
+165,get_text(),"markup = '<a href=""http://example.com/"">\nI linked to <i>example.com</i>\n</a>'
+soup = BeautifulSoup(markup, 'html.parser')
+
+soup.get_text()
+'\nI linked to example.com\n'
+soup.i.get_text()
+'example.com'
+",6,False,False,False,True,False
+166,get_text(),"# soup.get_text(""|"")
+'\nI linked to |example.com|\n'
+",2,False,False,False,True,False
+167,get_text(),"# soup.get_text(""|"", strip=True)
+'I linked to|example.com'
+",2,False,False,False,True,False
+168,get_text(),"[text for text in soup.stripped_strings]
+# ['I linked to', 'example.com']
+",2,False,False,False,False,False
+169,Differences between parsers,"BeautifulSoup(""<a><b/></a>"", ""html.parser"")
+# <a><b></b></a>
+",2,False,False,False,False,False
+170,Differences between parsers,"print(BeautifulSoup(""<a><b/></a>"", ""xml""))
+# <?xml version=""1.0"" encoding=""utf-8""?>
+# <a><b/></a>
+",3,False,False,False,False,False
+171,Differences between parsers,"BeautifulSoup(""<a></p>"", ""lxml"")
+# <html><body><a></a></body></html>
+",2,False,False,False,False,False
+172,Differences between parsers,"BeautifulSoup(""<a></p>"", ""html5lib"")
+# <html><head></head><body><a><p></p></a></body></html>
+",2,False,False,False,False,False
+173,Differences between parsers,"BeautifulSoup(""<a></p>"", ""html.parser"")
+# <a></a>
+",2,False,False,False,False,False
+174,Encodings,"markup = b""<h1>Sacr\xc3\xa9 bleu!</h1>""
+soup = BeautifulSoup(markup, 'html.parser')
+soup.h1
+# <h1>Sacré bleu!</h1>
+soup.h1.string
+# 'Sacr\xe9 bleu!'
+",6,False,False,False,False,False
+175,Encodings,"soup.original_encoding
+# 'utf-8'
+",2,False,False,False,False,False
+176,Encodings,"markup = ""<h1>Sacré bleu!</h1>""
+soup = BeautifulSoup(markup, 'html.parser')
+print(soup.original_encoding)
+# None
+",4,False,False,False,False,False
+177,Encodings,"markup = b""<h1>\xed\xe5\xec\xf9</h1>""
+soup = BeautifulSoup(markup, 'html.parser')
+print(soup.h1)
+# <h1>νεμω</h1>
+print(soup.original_encoding)
+# iso-8859-7
+",6,False,False,False,False,False
+178,Encodings,"soup = BeautifulSoup(markup, 'html.parser', from_encoding=""iso-8859-8"")
+print(soup.h1)
+# <h1>םולש</h1>
+print(soup.original_encoding)
+# iso8859-8
+",5,False,False,False,False,False
+179,Encodings,"soup = BeautifulSoup(markup, 'html.parser', exclude_encodings=[""iso-8859-7""])
+print(soup.h1)
+# <h1>םולש</h1>
+print(soup.original_encoding)
+# WINDOWS-1255
+",5,False,False,False,False,False
+180,Output encoding,"markup = b'''
+ <html>
+  <head>
+   <meta content=""text/html; charset=ISO-Latin-1"" http-equiv=""Content-type"" />
+  </head>
+  <body>
+   <p>Sacr\xe9 bleu!</p>
+  </body>
+ </html>
+'''
+
+soup = BeautifulSoup(markup, 'html.parser')
+print(soup.prettify())
+# <html>
+#  <head>
+#   <meta content=""text/html; charset=utf-8"" http-equiv=""Content-type"" />
+#  </head>
+#  <body>
+#   <p>
+#    Sacré bleu!
+#   </p>
+#  </body>
+# </html>
+",22,False,False,False,False,False
+181,Output encoding,"print(soup.prettify(""latin-1""))
+# <html>
+#  <head>
+#   <meta content=""text/html; charset=latin-1"" http-equiv=""Content-type"" />
+# ...
+",5,False,False,False,False,False
+182,Output encoding,"soup.p.encode(""latin-1"")
+# b'<p>Sacr\xe9 bleu!</p>'
+
+soup.p.encode(""utf-8"")
+# b'<p>Sacr\xc3\xa9 bleu!</p>'
+",4,False,False,False,False,False
+183,Output encoding,"markup = u""<b>\N{SNOWMAN}</b>""
+snowman_soup = BeautifulSoup(markup, 'html.parser')
+tag = snowman_soup.b
+",3,False,False,False,False,False
+184,Output encoding,"print(tag.encode(""utf-8""))
+# b'<b>\xe2\x98\x83</b>'
+
+print(tag.encode(""latin-1""))
+# b'<b>&#9731;</b>'
+
+print(tag.encode(""ascii""))
+# b'<b>&#9731;</b>'
+",6,False,False,False,False,False
+185,"Unicode, Dammit","from bs4 import UnicodeDammit
+dammit = UnicodeDammit(b""\xc2\xabSacr\xc3\xa9 bleu!\xc2\xbb"")
+print(dammit.unicode_markup)
+# «Sacré bleu!»
+dammit.original_encoding
+# 'utf-8'
+",6,False,False,False,False,False
+186,"Unicode, Dammit","dammit = UnicodeDammit(""Sacr\xe9 bleu!"", [""latin-1"", ""iso-8859-1""])
+print(dammit.unicode_markup)
+# Sacré bleu!
+dammit.original_encoding
+# 'latin-1'
+",5,False,False,False,False,False
+187,Smart quotes,"markup = b""<p>I just \x93love\x94 Microsoft Word\x92s smart quotes</p>""
+
+UnicodeDammit(markup, [""windows-1252""], smart_quotes_to=""html"").unicode_markup
+# '<p>I just &ldquo;love&rdquo; Microsoft Word&rsquo;s smart quotes</p>'
+
+UnicodeDammit(markup, [""windows-1252""], smart_quotes_to=""xml"").unicode_markup
+# '<p>I just &#x201C;love&#x201D; Microsoft Word&#x2019;s smart quotes</p>'
+",5,False,False,False,False,False
+188,Smart quotes,"UnicodeDammit(markup, [""windows-1252""], smart_quotes_to=""ascii"").unicode_markup
+# '<p>I just ""love"" Microsoft Word\'s smart quotes</p>'
+",2,False,False,False,False,False
+189,Smart quotes,"UnicodeDammit(markup, [""windows-1252""]).unicode_markup
+# '<p>I just “love” Microsoft Word’s smart quotes</p>'
+",2,False,False,False,False,False
+190,Inconsistent encodings,"snowmen = (u""\N{SNOWMAN}"" * 3)
+quote = (u""\N{LEFT DOUBLE QUOTATION MARK}I like snowmen!\N{RIGHT DOUBLE QUOTATION MARK}"")
+doc = snowmen.encode(""utf8"") + quote.encode(""windows_1252"")
+",3,False,False,False,False,False
+191,Inconsistent encodings,"print(doc)
+# ☃☃☃�I like snowmen!�
+
+print(doc.decode(""windows-1252""))
+# â˜ƒâ˜ƒâ˜ƒ“I like snowmen!”
+",4,False,False,False,False,False
+192,Inconsistent encodings,"new_doc = UnicodeDammit.detwingle(doc)
+print(new_doc.decode(""utf8""))
+# ☃☃☃“I like snowmen!”
+",3,False,False,False,False,False
+193,Line numbers,"markup = '<p class=""1""\n>Paragraph 1</p>\n    <p class=""2"">Paragraph 2</p>'
+print(markup)
+# Line 1: <p class=""1""
+# Line 2: >Paragraph 1</p>
+# Line 3:     <p class=""2"">Paragraph 2</p>
+
+soup = BeautifulSoup(markup, 'html.parser')
+for tag in soup.find_all('p'):
+    print(repr((tag.sourceline, tag.sourcepos, tag.string)))
+# (1, 0, 'Paragraph 1') # The < just before p class=""1""
+# (3, 4, 'Paragraph 2') # The < just before p class=""2""
+",10,True,False,False,False,False
+194,Line numbers,"print(markup)
+# Line 1: <p class=""1""
+# Line 2: >Paragraph 1</p>
+# Line 3:     <p class=""2"">Paragraph 2</p>
+
+soup = BeautifulSoup(markup, 'html5lib')
+for tag in soup.find_all('p'):
+    print(repr((tag.sourceline, tag.sourcepos, tag.string)))
+# (2, 0, 'Paragraph 1') # The > just before Paragraph 1
+# (3, 16, 'Paragraph 2') # The > just before Paragraph 2
+",9,True,False,False,False,False
+195,Line numbers,"markup = ""<p\n>Paragraph 1</p>\n    <p>Paragraph 2</p>""
+soup = BeautifulSoup(markup, 'html.parser', store_line_numbers=False)
+print(soup.p.sourceline)
+# None
+",4,False,False,False,False,False
+196,Comparing objects for equality,"markup = ""<p>I want <b>pizza</b> and more <b>pizza</b>!</p>""
+soup = BeautifulSoup(markup, 'html.parser')
+first_b, second_b = soup.find_all('b')
+print(first_b == second_b)
+# True
+
+print(first_b.previous_element == second_b.previous_element)
+# False
+",7,True,False,False,False,False
+197,Comparing objects for equality,"print(first_b is second_b)
+# False
+",2,False,False,False,False,False
+198,Copying Beautiful Soup objects,"import copy
+p_copy = copy.copy(soup.p)
+print(p_copy)
+# <p>I want <b>pizza</b> and more <b>pizza</b>!</p>
+",4,False,False,False,False,False
+199,Copying Beautiful Soup objects,"print(soup.p == p_copy)
+# True
+
+print(soup.p is p_copy)
+# False
+",4,False,False,False,False,False
+200,Copying Beautiful Soup objects,"print(p_copy.parent)
+# None
+",2,False,False,False,False,False
+201,Copying Beautiful Soup objects,"original = BeautifulSoup('<a id=""a_tag"" class=""link"">the <i>link</i></a>', 'html.parser')
+print(original.a)
+# <a class=""link"" id=""a_tag"">the <i>link</a>
+print(original.a.copy_self())
+# <a class=""link"" id=""a_tag""></a>
+",5,False,False,False,False,False
+202,Custom element filtering,"from bs4 import Tag, NavigableString
+def non_whitespace_element_func(tag_or_string):
+    """"""
+    return True for:
+    * all Tag objects
+    * NavigableString objects that contain non-whitespace text
+    """"""
+    return (
+        isinstance(tag_or_string, Tag) or
+        (isinstance(tag_or_string, NavigableString) and
+            tag_or_string.strip() != """"))
+",11,False,False,False,False,False
+203,Custom element filtering,"from bs4.filter import ElementFilter
+non_whitespace_filter = ElementFilter(non_whitespace_element_func)
+",2,False,False,False,False,False
+204,Custom element filtering,"from bs4 import BeautifulSoup
+small_doc = """"""
+<p>
+  <b>bold</b>
+  <i>italic</i>
+  and
+  <u>underline</u>
+</p>
+""""""
+soup = BeautifulSoup(small_doc, 'html.parser')
+
+soup.find('p').find_all(non_whitespace_filter, recursive=False)
+# [<b>bold</b>, <i>italic</i>, '\n  and\n  ', <u>underline</u>]
+
+soup.find(""b"").find_next(non_whitespace_filter)
+# 'bold'
+
+soup.find(""i"").find_next_siblings(non_whitespace_filter)
+# ['\n  and\n  ', <u>underline</u>]
+",16,True,True,False,False,False
+205,Custom element iteration,"import random
+def random_walk(starting_location):
+    location = starting_location
+    while location is not None:
+        yield location
+        if random.random() < 0.5:
+            location = location.next_element
+        else:
+            location = location.previous_element
+        if location is None:
+            return
+",11,False,False,False,False,False
+206,Custom element iteration,"[x for x in non_whitespace_filter.filter(random_walk(soup.b))]
+# [<b>bold</b>, 'bold', <b>bold</b>, <p><b>bold</b>...]
+
+[x for x in non_whitespace_filter.filter(random_walk(soup.b))]
+# [<b>bold</b>, <b>bold</b>, 'bold', <i>italic</i>, <i>italic</i>, ...]
+",4,False,False,False,False,False
+207,Parsing only part of a document,"from bs4 import SoupStrainer
+
+only_a_tags = SoupStrainer(""a"")
+
+only_tags_with_id_link2 = SoupStrainer(id=""link2"")
+
+def is_short_string(string):
+    return string is not None and len(string) < 10
+
+only_short_strings = SoupStrainer(string=is_short_string)
+",6,False,False,False,False,False
+208,Parsing only part of a document,"html_doc = """"""<html><head><title>The Dormouse's story</title></head>
+<body>
+<p class=""title""><b>The Dormouse's story</b></p>
+
+<p class=""story"">Once upon a time there were three little sisters; and their names were
+<a href=""http://example.com/elsie"" class=""sister"" id=""link1"">Elsie</a>,
+<a href=""http://example.com/lacie"" class=""sister"" id=""link2"">Lacie</a> and
+<a href=""http://example.com/tillie"" class=""sister"" id=""link3"">Tillie</a>;
+and they lived at the bottom of a well.</p>
+
+<p class=""story"">...</p>
+""""""
+
+print(BeautifulSoup(html_doc, ""html.parser"", parse_only=only_a_tags).prettify())
+# <a class=""sister"" href=""http://example.com/elsie"" id=""link1"">
+#  Elsie
+# </a>
+# <a class=""sister"" href=""http://example.com/lacie"" id=""link2"">
+#  Lacie
+# </a>
+# <a class=""sister"" href=""http://example.com/tillie"" id=""link3"">
+#  Tillie
+# </a>
+
+print(BeautifulSoup(html_doc, ""html.parser"", parse_only=only_tags_with_id_link2).prettify())
+# <a class=""sister"" href=""http://example.com/lacie"" id=""link2"">
+#  Lacie
+# </a>
+
+print(BeautifulSoup(html_doc, ""html.parser"", parse_only=only_short_strings).prettify())
+# Elsie
+# ,
+# Lacie
+# and
+# Tillie
+# ...
+#
+",32,False,False,False,False,False
+209,Customizing multi-valued attributes,"markup = '<a class=""cls1 cls2"" id=""id1 id2"">'
+soup = BeautifulSoup(markup, 'html.parser')
+soup.a['class']
+# ['cls1', 'cls2']
+soup.a['id']
+# 'id1 id2'
+",6,False,False,False,False,False
+210,Customizing multi-valued attributes,"soup = BeautifulSoup(markup, 'html.parser', multi_valued_attributes=None)
+soup.a['class']
+# 'cls1 cls2'
+soup.a['id']
+# 'id1 id2'
+",5,False,False,False,False,False
+211,Handling duplicate attributes,"markup = '<a href=""http://url1/"" href=""http://url2/"">'
+",1,False,False,False,False,False
+212,Handling duplicate attributes,"soup = BeautifulSoup(markup, 'html.parser')
+soup.a['href']
+# http://url2/
+
+soup = BeautifulSoup(markup, 'html.parser', on_duplicate_attribute='replace')
+soup.a['href']
+# http://url2/
+",6,False,False,False,False,False
+213,Handling duplicate attributes,"soup = BeautifulSoup(markup, 'html.parser', on_duplicate_attribute='ignore')
+soup.a['href']
+# http://url1/
+",3,False,False,False,False,False
+214,Handling duplicate attributes,"def accumulate(attributes_so_far, key, value):
+    if not isinstance(attributes_so_far[key], list):
+        attributes_so_far[key] = [attributes_so_far[key]]
+    attributes_so_far[key].append(value)
+
+soup = BeautifulSoup(markup, 'html.parser', on_duplicate_attribute=accumulate)
+soup.a['href']
+# [""http://url1/"", ""http://url2/""]
+",7,False,False,False,False,False
+215,Instantiating custom subclasses,"from bs4 import Tag, NavigableString
+class MyTag(Tag):
+    pass
+
+
+class MyString(NavigableString):
+    pass
+
+
+markup = ""<div>some text</div>""
+soup = BeautifulSoup(markup, 'html.parser')
+isinstance(soup.div, MyTag)
+# False
+isinstance(soup.div.string, MyString)
+# False
+
+my_classes = { Tag: MyTag, NavigableString: MyString }
+soup = BeautifulSoup(markup, 'html.parser', element_classes=my_classes)
+isinstance(soup.div, MyTag)
+# True
+isinstance(soup.div.string, MyString)
+# True
+",17,False,False,False,False,False
+216,diagnose(),"from bs4.diagnose import diagnose
+with open(""bad.html"") as fp:
+    data = fp.read()
+
+diagnose(data)
+
+# Diagnostic running on Beautiful Soup 4.2.0
+# Python version 2.7.3 (default, Aug  1 2012, 05:16:07)
+# I noticed that html5lib is not installed. Installing it may help.
+# Found lxml version 2.3.2.0
+#
+# Trying to parse your data with html.parser
+# Here's what html.parser did with the document:
+# ...
+",12,False,False,False,False,False
+217,Parsing XML,"soup = BeautifulSoup(markup, ""xml"")
+",1,False,False,False,False,False
+218,Porting code to BS4,"from BeautifulSoup import BeautifulSoup
+",1,False,False,False,False,False
+219,Porting code to BS4,"from bs4 import BeautifulSoup
+",1,False,False,False,False,False
