@@ -32,9 +32,9 @@ app.mount("/static/charts", StaticFiles(directory=str(CHARTS_DIR)), name="charts
 
 # Router wiring - mọi người tự uncomment lúc route file ok nhá
 
-# from api.routes import sections     # Dat
-# from api.routes import links        # Phuc
-from api.routes import code         # Hung
+from api.routes import sections     # Dat
+from api.routes import links        # Phuc
+# from api.routes import code         # Hung
 # from api.routes import analytics    # Duong
 from api.routes import pipeline     # Hung
 from api.routes import search       # Hung 
@@ -43,6 +43,9 @@ from api.routes import graph        # Hung
 # app.include_router(sections.router,  prefix="/sections",      tags=["sections"])
 # app.include_router(links.router,     prefix="/links",         tags=["links"])
 app.include_router(code.router,      prefix="/code-examples", tags=["code"])
+app.include_router(sections.router,  prefix="/sections",      tags=["sections"])
+app.include_router(links.router,     prefix="/links",         tags=["links"])
+# app.include_router(code.router,      prefix="/code-examples", tags=["code"])
 # app.include_router(analytics.router, prefix="/analytics",     tags=["analytics"])
 app.include_router(pipeline.router,  prefix="/pipeline",      tags=["pipeline"])
 app.include_router(search.router,    prefix="/search",        tags=["search"])
