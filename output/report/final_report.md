@@ -1,7 +1,7 @@
 
 # BeautifulSoup Documentation Analytics - Final Report
 
-**Generated:** 2026-07-14  
+**Generated:** 2026-07-15  
 
 **Source:** https://www.crummy.com/software/BeautifulSoup/bs4/doc/  
 
@@ -84,42 +84,42 @@ Parsing uses **BeautifulSoup 4** with the built-in `html.parser` backend - chose
 
 ### Top Sections by Word Count
 
-![Top Sections by Word Count](http://localhost:8001/static/charts/word_count_by_section.png)
+![Top Sections by Word Count](../charts/word_count_by_section.png)
 
 
 ### Code Examples by Section
 
-![Code Examples by Section](http://localhost:8001/static/charts/code_examples_by_section.png)
+![Code Examples by Section](../charts/code_examples_by_section.png)
 
 
 ### Link Type Distribution
 
-![Link Type Distribution](http://localhost:8001/static/charts/link_type_distribution.png)
+![Link Type Distribution](../charts/link_type_distribution.png)
 
 
 ### Code Example Line Count Distribution
 
-![Code Example Line Count Distribution](http://localhost:8001/static/charts/code_linecount_hist.png)
+![Code Example Line Count Distribution](../charts/code_linecount_hist.png)
 
 
 ### TF-IDF Keyword Ranking vs Raw Frequency
 
-![TF-IDF Keyword Ranking vs Raw Frequency](http://localhost:8001/static/charts/tfidf_keywords.png)
+![TF-IDF Keyword Ranking vs Raw Frequency](../charts/tfidf_keywords.png)
 
 
 ### Readability Score by Section (Flesch Reading Ease)
 
-![Readability Score by Section (Flesch Reading Ease)](http://localhost:8001/static/charts/readability_by_section.png)
+![Readability Score by Section (Flesch Reading Ease)](../charts/readability_by_section.png)
 
 
 ### Section Cosine Similarity Heatmap
 
-![Section Cosine Similarity Heatmap](http://localhost:8001/static/charts/similarity_heatmap.png)
+![Section Cosine Similarity Heatmap](../charts/similarity_heatmap.png)
 
 
 ### BS4 Method Usage in Code Examples
 
-![BS4 Method Usage in Code Examples](http://localhost:8001/static/charts/method_usage.png)
+![BS4 Method Usage in Code Examples](../charts/method_usage.png)
 
 
 ## 6. Key Findings

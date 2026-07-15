@@ -33,9 +33,8 @@ logger = logging.getLogger(__name__)
 
 FINAL_REPORT_MD = REPORT_DIR / "final_report.md"
 
-# API base - charts are served at /static/charts/<filename>
-_API_BASE = "http://localhost:8001"
-
+# Charts referenced relative to the report file location (output/report/final_report.md)
+_CHART_REL = "../charts"
 
 # Public entry point
 
@@ -224,7 +223,7 @@ def generate_md(
     )
     for chart_path in ALL_CHART_PATHS:
         name = CHART_NAMES.get(chart_path.name, chart_path.stem)
-        url  = f"{_API_BASE}/static/charts/{chart_path.name}"
+        url  = f"{_CHART_REL}/{chart_path.name}"
         h(3, name)
         if chart_path.exists():
             lines.append(f"![{name}]({url})\n")
