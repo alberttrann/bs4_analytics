@@ -1,10 +1,13 @@
 """
 api/routes/code.py
-Owner: Hung (A)
 GET /code-examples (filtered), GET /code-examples/{id}
 """
 
 from __future__ import annotations
+
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from fastapi import APIRouter, HTTPException, Query
 
@@ -17,6 +20,13 @@ _VALID_METHOD_FILTERS = [
     "contains_find_all", "contains_find", "contains_select",
     "contains_get_text", "contains_requests",
 ]
+
+_BOOL_COLS = [
+    "contains_find_all", "contains_find", "contains_select",
+    "contains_get_text", "contains_requests",
+]
+
+_STR_COLS = ["section_title", "code_text"]
 
 
 @router.get("/", response_model=PaginatedCode, summary="List code examples")
@@ -31,6 +41,13 @@ def get_code_examples(
 ):
     df = load_code_examples()
 
+    # Fix NaN in string columns before anything else
+    df[_STR_COLS] = df[_STR_COLS].fillna("")
+
+    # Ensure boolean columns are actually bool
+    for col in _BOOL_COLS:
+        df[col] = df[col].astype(bool)
+
     if method:
         if method not in _VALID_METHOD_FILTERS:
             raise HTTPException(
@@ -38,7 +55,7 @@ def get_code_examples(
                 detail=f"Unknown method filter '{method}'. "
                        f"Valid options: {_VALID_METHOD_FILTERS}",
             )
-        df = df[df[method] == True]  
+        df = df[df[method] == True]  # noqa: E712
 
     if section:
         df = df[df["section_title"] == section]
@@ -50,7 +67,11 @@ def get_code_examples(
 @router.get("/{example_id}", response_model=CodeExampleModel,
             summary="Get one code example by ID")
 def get_code_example(example_id: int):
-    df  = load_code_examples()
+    df = load_code_examples()
+    df[_STR_COLS] = df[_STR_COLS].fillna("")
+    for col in _BOOL_COLS:
+        df[col] = df[col].astype(bool)
+
     row = df[df["example_id"] == example_id]
     if row.empty:
         raise HTTPException(status_code=404,

@@ -1,57 +1,120 @@
 """
 app/pages/2_links.py
-Owner: Phuc (C)
-Task : Link explorer — type filter, pie chart, calls GET /links
+Link explorer - type filter, pie chart, data table, calls GET /links and /links/stats.
 """
+from __future__ import annotations
+import sys
+from pathlib import Path
+from pathlib import Path
+import sys
 
-import streamlit as st
-import requests
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
 import os
+
 import pandas as pd
 import plotly.express as px
+import requests
+import streamlit as st
 
-API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000")
+from shared.constants import LINK_TYPES
 
-st.set_page_config(page_title="Links Analytics", page_icon="🔗")
-st.title("🔗 Phân tích Links")
+from app.config import API_BASE, WS_BASE
 
-# 1. Gọi API và vẽ biểu đồ tròn (Pie Chart)
-st.subheader("📊 Phân bố các loại liên kết")
-try:
-    res_stats = requests.get(f"{API_BASE_URL}/links/stats")
-    if res_stats.status_code == 200:
-        stats = res_stats.json()
-        df_stats = pd.DataFrame(list(stats.items()), columns=['Loại Link', 'Số lượng'])
-        
-        # Vẽ biểu đồ bằng Plotly
-        fig = px.pie(df_stats, values='Số lượng', names='Loại Link', hole=0.3)
+st.set_page_config(page_title="Links - BS4 Analytics",
+                   page_icon="🔗", layout="wide")
+st.title("🔗 Extracted Links")
+
+# Fetch link stats for the pie chart
+@st.cache_data(ttl=60, show_spinner=False)
+def fetch_stats():
+    try:
+        return requests.get(f"{API_BASE}/links/stats", timeout=8).json()
+    except Exception as e:
+        return {"error": str(e)}
+
+stats = fetch_stats()
+if "error" not in stats:
+    total_links = sum(stats.values())
+    st.caption(f"Total links extracted: **{total_links:,}**")
+
+    col_pie, col_table = st.columns([2, 1])
+    with col_pie:
+        fig = px.pie(
+            values=list(stats.values()),
+            names=list(stats.keys()),
+            title="Link Type Distribution",
+            color_discrete_sequence=px.colors.qualitative.Set2,
+            hole=0.35,
+        )
+        fig.update_traces(textposition="inside", textinfo="percent+label")
+        fig.update_layout(showlegend=False, margin=dict(t=40, b=0, l=0, r=0))
         st.plotly_chart(fig, use_container_width=True)
-    else:
-        st.error("Lỗi khi lấy dữ liệu thống kê.")
-except Exception as e:
-    st.error(f"Lỗi kết nối API: {e}")
 
-st.markdown("---")
+    with col_table:
+        st.markdown("**Counts by type**")
+        df_stats = pd.DataFrame(
+            [(k, v, f"{v/total_links*100:.1f}%") for k, v in sorted(stats.items(), key=lambda x: -x[1])],
+            columns=["Type", "Count", "%"],
+        )
+        st.dataframe(df_stats, hide_index=True, use_container_width=True)
 
-# 2. Bảng danh sách liên kết có chức năng lọc
-st.subheader("📋 Chi tiết các liên kết")
-link_types = ["Tất cả", "internal_anchor", "external_link", "documentation_link", "image_link", "empty_or_invalid"]
-selected_type = st.selectbox("Lọc theo loại link:", link_types)
+st.divider()
 
-# Thiết lập URL gọi API tùy theo bộ lọc
-api_url = f"{API_BASE_URL}/links"
-if selected_type != "Tất cả":
-    api_url += f"?link_type={selected_type}"
+# Controls for the link table
+col_type, col_search = st.columns([2, 3])
+with col_type:
+    selected_type = st.selectbox("Filter by link type", ["All"] + LINK_TYPES)
+with col_search:
+    search_q = st.text_input("🔍 Search link text or URL", placeholder="e.g. pypi.org")
 
-try:
-    res_links = requests.get(api_url)
-    if res_links.status_code == 200:
-        links_list = res_links.json()
-        if links_list:
-            df_links = pd.DataFrame(links_list)
-            # Chỉ hiển thị các cột quan trọng
-            st.dataframe(df_links[['section_title', 'link_text', 'link_type', 'href']], use_container_width=True)
-        else:
-            st.info("Không có liên kết nào phù hợp với bộ lọc.")
-except Exception as e:
-    st.error("Lỗi khi lấy danh sách liên kết.")
+# Fetch and display link table
+@st.cache_data(ttl=60, show_spinner=False)
+def fetch_links(lt, sq):
+    params = {}
+    if lt and lt != "All": params["link_type"] = lt
+    if sq:                 params["search"]    = sq
+    try:
+        r = requests.get(f"{API_BASE}/links", params=params, timeout=10)
+        r.raise_for_status()
+        return r.json()
+    except Exception as e:
+        return {"error": str(e)}
+
+link_data = fetch_links(selected_type, search_q)
+
+if "error" in link_data:
+    st.error(f"Cannot load links: {link_data['error']}")
+else:
+    items = link_data.get("items", [])
+    st.caption(f"Showing {len(items)} link(s)")
+    if items:
+        df = pd.DataFrame(items)
+        # Make href clickable
+        df["href_display"] = df["href"].apply(
+            lambda h: f"[{h[:60]}...]({h})" if len(h) > 60 else f"[{h}]({h})"
+            if h.startswith("http") else h
+        )
+if items:
+    df = pd.DataFrame(items)
+    
+    BS4_DOC_URL = "https://www.crummy.com/software/BeautifulSoup/bs4/doc/"
+    
+    # Internal anchors get prefixed with the real docs URL
+    df["url_display"] = df["href"].apply(
+        lambda h: BS4_DOC_URL + h if h.startswith("#") else h
+    )
+    
+    st.dataframe(
+        df[["link_text", "url_display", "link_type", "section_title"]],
+        use_container_width=True,
+        hide_index=True,
+        column_config={
+            "link_text":     st.column_config.TextColumn("Link Text"),
+            "url_display":   st.column_config.LinkColumn("URL"),
+            "link_type":     st.column_config.TextColumn("Type"),
+            "section_title": st.column_config.TextColumn("Section"),
+        },
+    )
+else:
+    st.info("No links match the current filters.")

@@ -1,7 +1,6 @@
 """
 pipeline/advanced/similarity.py
-Owner: Hung (A)
-Advanced — cosine similarity matrix between documentation sections.
+Advanced - cosine similarity matrix between documentation sections.
 Used to populate the heatmap in app/pages/4_analytics.py.
 """
 
@@ -26,9 +25,9 @@ def compute_similarity_matrix(sections: pd.DataFrame) -> np.ndarray:
     """
     from sklearn.feature_extraction.text import TfidfVectorizer
     from sklearn.metrics.pairwise import cosine_similarity
-
+    from shared.constants import STOPWORDS
     texts  = sections["section_text"].fillna("").tolist()
-    vec    = TfidfVectorizer(stop_words="english")
+    vec   = TfidfVectorizer(stop_words=list(STOPWORDS), max_features=500)
     X      = vec.fit_transform(texts)
     matrix = cosine_similarity(X)
     logger.info("Computed %dx%d similarity matrix", *matrix.shape)
@@ -59,3 +58,15 @@ def top_similar_pairs(
             pairs.append((titles[i], titles[j], float(matrix[i, j])))
 
     return sorted(pairs, key=lambda x: -x[2])[:top_n]
+
+if __name__ == "__main__":
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+    from shared.utils import load_sections
+    sections = load_sections()
+
+    print("\n── Top Similar Section Pairs ──")
+    pairs = top_similar_pairs(sections, top_n=10)
+    for a, b, score in pairs:
+        print(f"  {score:.3f}  {a[:35]:<35} ↔  {b[:35]}")

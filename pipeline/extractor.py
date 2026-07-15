@@ -1,67 +1,93 @@
 """
 pipeline/extractor.py
-Owner: Phuc (C)
-Task : F3+F4 — soup → sections.csv and links.csv
+Features 3 & 4 - Section Extractor + Link Extractor
+soup → sections.csv and links.csv
 """
 
-import pandas as pd
-from bs4 import BeautifulSoup
-from pipeline.link_classifier import classify_link
-from shared.constants import SECTION_COLS
-from pipeline.parser import extract_section_tree, HEADING_TAGS
+from __future__ import annotations
 
-def run_extraction():
-    print("Bắt đầu tiến trình trích xuất dữ liệu...")
-    
-    # 1. Đọc file HTML raw đã được tải về
-    html_path = "data/raw/beautifulsoup_doc.html"
-    try:
-        with open(html_path, "r", encoding="utf-8") as f:
-            soup = BeautifulSoup(f, "html.parser")
-    except FileNotFoundError:
-        print(f"Lỗi: Không tìm thấy {html_path}. Hãy chạy 'python -m pipeline.collector' trước.")
-        return
-    
-    # ---------------------------------------------------------
-    # PHẦN 1: TẠO FILE sections.csv
-    # ---------------------------------------------------------
-    print("1. Đang trích xuất sections...")
-    sections_data = extract_section_tree(soup)
-    df_sections = pd.DataFrame(sections_data, columns=SECTION_COLS)
-    df_sections.to_csv("data/processed/sections.csv", index=False)
-    print(f"   -> Đã lưu {len(df_sections)} sections.")
-    
-    # ---------------------------------------------------------
-    # PHẦN 2: TẠO FILE links.csv
-    # ---------------------------------------------------------
-    print("2. Đang trích xuất links...")
-    links_data = []
-    
-    # Lấy danh sách các thẻ heading (h1, h2, h3) từ biến của Đạt
-    heading_tags_list = list(HEADING_TAGS.keys())
-    
-    for a_tag in soup.find_all("a"):
-        href = a_tag.get("href")
+import logging
+
+import pandas as pd
+from bs4 import BeautifulSoup, Tag
+
+from pipeline.link_classifier import classify_link
+from pipeline.parser import extract_section_tree
+from shared.constants import LINK_COLS, LINKS_CSV, SECTION_COLS, SECTIONS_CSV
+from shared.utils import ensure_dirs, save_csv
+
+logger = logging.getLogger(__name__)
+
+
+# Section extraction
+
+def extract_sections(soup: BeautifulSoup) -> pd.DataFrame:
+    """
+    Build sections DataFrame from the parsed soup and write sections.csv.
+    Delegates heading-tree logic to parser.extract_section_tree().
+    """
+    rows = extract_section_tree(soup)
+    df   = pd.DataFrame(rows, columns=SECTION_COLS)
+    ensure_dirs()
+    save_csv(df, SECTIONS_CSV, expected_cols=SECTION_COLS)
+    logger.info("sections.csv → %d rows", len(df))
+    print(f"[extractor] sections.csv → {len(df)} rows")
+    return df
+
+
+# Link extraction
+
+def extract_links(soup: BeautifulSoup, sections: pd.DataFrame) -> pd.DataFrame:
+    rows: list[dict] = []
+    for tag in soup.find_all("a"):
+        href      = tag.get("href", "") or ""
+        link_text = tag.get_text(strip=True).replace("¶", "").strip()
         link_type = classify_link(href)
 
-        link_text = a_tag.get_text(strip=True)
-        
-        # Logic đi ngược lên tìm heading gần nhất phía trên thẻ <a>
-        nearest_heading_tag = a_tag.find_previous(heading_tags_list)
-        nearest_heading = nearest_heading_tag.get_text(strip=True) if nearest_heading_tag else "No Heading"
+        # Skip pilcrow-only anchor links (¶ permalink markers Sphinx adds)
+        if not link_text and href.startswith("#"):
+            continue
 
-        links_data.append({
-            "href": href,
-            "link_type": link_type,
-            "link_text": link_text,
-            "section_title": nearest_heading
+        section_title = _find_parent_section(tag, sections)
+        rows.append({
+            "link_text":     link_text,
+            "href":          href,
+            "link_type":     link_type,
+            "section_title": section_title,
         })
 
-    df_links = pd.DataFrame(links_data)
-    df_links.to_csv("data/processed/links.csv", index=False)
-    print(f"   -> Đã phân loại và lưu {len(df_links)} links.")
-    
-    print("Hoàn thành trích xuất! Các file đã được lưu vào thư mục data/processed/")
+    df = pd.DataFrame(rows, columns=LINK_COLS)
+    save_csv(df, LINKS_CSV, expected_cols=LINK_COLS)
+    logger.info("links.csv → %d rows", len(df))
+    print(f"[extractor] links.csv → {len(df)} rows")
+    return df
+
+
+def _find_parent_section(tag: Tag, sections: pd.DataFrame) -> str:
+    """Find the nearest preceding heading in document order."""
+    for heading in tag.find_all_previous(["h1", "h2", "h3"]):
+        title = heading.get_text(strip=True).replace("¶", "").strip()
+        match = sections[sections["section_title"] == title]
+        if not match.empty:
+            return title
+    return "Unknown"
+
+
+# Combined entry point
+
+def extract_all(soup: BeautifulSoup) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Run both extractors in dependency order. Returns (sections_df, links_df)."""
+    sections = extract_sections(soup)
+    links    = extract_links(soup, sections)
+    return sections, links
+
 
 if __name__ == "__main__":
-    run_extraction()
+    logging.basicConfig(level=logging.INFO)
+    from pipeline.parser import parse_html
+    soup = parse_html()
+    sections, links = extract_all(soup)
+    print(f"\nSections : {len(sections)}")
+    print(f"Links    : {len(links)}")
+    print("Link type breakdown:")
+    print(links["link_type"].value_counts().to_string())

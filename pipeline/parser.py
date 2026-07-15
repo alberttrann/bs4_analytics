@@ -1,134 +1,103 @@
 """
 pipeline/parser.py
-Owner: Dat (B)
-Task : F2 — load saved HTML, return BeautifulSoup object, extract section tree
+Feature 2 - HTML Parser
 """
 
 from __future__ import annotations
 
 import logging
+import re
 from pathlib import Path
-from typing import Any
 
 from bs4 import BeautifulSoup, NavigableString, Tag
 
-from shared.constants import RAW_HTML_PATH
+from shared.constants import RAW_HTML_PATH, SECTION_COLS
 from shared.utils import word_count
 
 logger = logging.getLogger(__name__)
 
-HEADING_TAGS: dict[str, int] = {"h1": 1, "h2": 2, "h3": 3}
+_HEADING_TAGS = {"h1", "h2", "h3"}
+_HEADING_LEVEL = {"h1": 1, "h2": 2, "h3": 3}
 
 
-def load_html(path: Path = RAW_HTML_PATH) -> BeautifulSoup:
-    """
-    Load raw HTML from disk and return a BeautifulSoup object.
-
-    Raises
-    ------
-    FileNotFoundError
-        When collector.py has not been run yet.
-    """
+def parse_html(path: Path = RAW_HTML_PATH) -> BeautifulSoup:
+    """Load saved HTML from disk and return a BeautifulSoup object."""
     if not path.exists():
         raise FileNotFoundError(
-            f"[Collector not yet run] Missing file: {path}\n"
+            f"HTML file not found: {path}\n"
             "Run `python -m pipeline.collector` first."
         )
-
     html = path.read_text(encoding="utf-8")
-    return BeautifulSoup(html, "html.parser")
+    soup = BeautifulSoup(html, "html.parser")
+    logger.info("Parsed HTML - %d total tags", len(list(soup.find_all())))
+    return soup
 
 
-def _heading_level(tag: Tag) -> int | None:
-    return HEADING_TAGS.get(tag.name)
-
-
-def _collect_section_elements(heading: Tag) -> list[Tag | NavigableString]:
+def extract_section_tree(soup: BeautifulSoup) -> list[dict]:
     """
-    Return sibling nodes belonging to *heading* until the next heading
-    of the same or higher level (h1 > h2 > h3).
+    Walk all h1/h2/h3 headings in document order.
+    For each heading, collect all sibling content until the next heading
+    of equal or higher level. Return list of dicts matching SECTION_COLS.
     """
-    current_level = _heading_level(heading)
-    if current_level is None:
+    headings = soup.find_all(["h1", "h2", "h3"])
+    if not headings:
+        logger.warning("No headings found in document")
         return []
 
-    elements: list[Tag | NavigableString] = []
-    for sibling in heading.next_siblings:
-        if isinstance(sibling, Tag) and _heading_level(sibling) is not None:
-            if _heading_level(sibling) <= current_level:
-                break
-        elements.append(sibling)
+    sections: list[dict] = []
 
-    return elements
+    for idx, heading in enumerate(headings):
+        level = _HEADING_LEVEL[heading.name]
+        title = heading.get_text(strip=True).replace("¶", "").strip()
 
+        # Collect siblings until next heading of same or higher level
+        content_tags: list[Tag] = []
+        for sibling in heading.next_siblings:
+            if isinstance(sibling, NavigableString):
+                continue
+            if isinstance(sibling, Tag):
+                if sibling.name in _HEADING_TAGS:
+                    if _HEADING_LEVEL[sibling.name] <= level:
+                        break
+                content_tags.append(sibling)
 
-def _section_metrics(elements: list[Tag | NavigableString]) -> tuple[str, int, int, int]:
-    """Build combined text and count code blocks / links within *elements*."""
-    text_parts: list[str] = []
-    code_block_count = 0
-    link_count = 0
+        # Aggregate text
+        section_text = " ".join(
+            tag.get_text(separator=" ", strip=True)
+            for tag in content_tags
+        )
+        section_text = re.sub(r"\s+", " ", section_text).strip()
 
-    for element in elements:
-        if isinstance(element, NavigableString):
-            text = str(element).strip()
-            if text:
-                text_parts.append(text)
-            continue
-
-        if not isinstance(element, Tag):
-            continue
-
-        text = element.get_text(separator=" ", strip=True)
-        if text:
-            text_parts.append(text)
-
-        code_block_count += len(element.find_all("div", class_="highlight"))
-        link_count += len(element.find_all("a"))
-
-    section_text = " ".join(text_parts)
-    return section_text, word_count(section_text), code_block_count, link_count
-
-
-def extract_section_tree(soup: BeautifulSoup) -> list[dict[str, Any]]:
-    """
-    Walk every h1/h2/h3 heading in document order and build section records.
-
-    Each section spans from its heading until the next heading of the same
-    or higher level. Returned dicts match ``SECTION_COLS``.
-    """
-    sections: list[dict[str, Any]] = []
-
-    for section_id, heading in enumerate(soup.find_all(list(HEADING_TAGS))):
-        level = _heading_level(heading)
-        if level is None:
-            continue
-
-        elements = _collect_section_elements(heading)
-        section_text, wc, code_blocks, links = _section_metrics(elements)
-
-        sections.append(
-            {
-                "section_id": section_id,
-                "section_level": level,
-                "section_title": heading.get_text(strip=True),
-                "section_text": section_text,
-                "word_count": wc,
-                "code_block_count": code_blocks,
-                "link_count": links,
-            }
+        # Count code blocks and links within this section's content
+        code_block_count = sum(
+            1 for tag in content_tags
+            if isinstance(tag, Tag) and tag.find("div", class_="highlight")
+            or (isinstance(tag, Tag) and "highlight" in tag.get("class", []))
+        )
+        link_count = sum(
+            len(tag.find_all("a")) if isinstance(tag, Tag) else 0
+            for tag in content_tags
         )
 
+        sections.append({
+            "section_id":       idx,
+            "section_level":    level,
+            "section_title":    title,
+            "section_text":     section_text,
+            "word_count":       word_count(section_text),
+            "code_block_count": code_block_count,
+            "link_count":       link_count,
+        })
+
+    logger.info("Extracted %d sections", len(sections))
     return sections
 
 
-def main() -> None:
-    logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
-
-    soup = load_html()
-    sections = extract_section_tree(soup)
-    logger.info("Found %d sections in %s", len(sections), RAW_HTML_PATH.name)
-    print(f"Found {len(sections)} sections")
-
-
 if __name__ == "__main__":
-    main()
+    logging.basicConfig(level=logging.INFO)
+    soup     = parse_html()
+    sections = extract_section_tree(soup)
+    print(f"Found {len(sections)} sections")
+    for s in sections[:5]:
+        print(f"  [H{s['section_level']}] {s['section_title'][:60]}  "
+              f"({s['word_count']} words, {s['code_block_count']} code blocks)")

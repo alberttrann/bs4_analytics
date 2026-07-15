@@ -3,8 +3,6 @@ shared/schemas.py
 =================
 Pydantic models used across pipeline/, api/, app/, and tests/.
 This file is the single source of truth for all data shapes.
-
-Ownership: Hung 
 """
 
 from __future__ import annotations
@@ -145,7 +143,7 @@ class AnalyticsSummary(BaseModel):
     avg_words_per_section: float = Field(..., ge=0)
     sections_with_no_code: int = Field(..., ge=0)
 
-    # Advanced fields — adds without breaking existing consumers
+    # Advanced fields - adds without breaking existing consumers
     adv_avg_readability_score: Optional[float] = Field(
         None, description="Mean Flesch Reading Ease across all sections"
     )

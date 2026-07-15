@@ -1,12 +1,6 @@
 """
 pipeline/pipeline.py
-Owner: Hung (A)
-Orchestrator — runs all pipeline stages in dependency order.
-Prints one progress line per stage to stdout (consumed by api/websocket.py).
-
-Usage:
-  python -m pipeline.pipeline               # full run
-  python -m pipeline.pipeline --skip-fetch  # reuse cached HTML
+Orchestrator - runs all pipeline stages in dependency order.
 """
 
 from __future__ import annotations
@@ -19,68 +13,94 @@ import time
 logger = logging.getLogger(__name__)
 
 
+def _stage_collect(skip_fetch: bool = False):
+    from pipeline.collector import fetch_and_save
+    from shared.constants import RAW_HTML_PATH
+    if skip_fetch and RAW_HTML_PATH.exists():
+        logger.info("Skipping fetch - reusing %s", RAW_HTML_PATH.name)
+        return
+    fetch_and_save()
+
+
+def _stage_parse():
+    from pipeline.parser import parse_html
+    soup = parse_html()
+    logger.info("Parsed HTML - %d tags", len(list(soup.find_all())))
+
+
+def _stage_extract():
+    from pipeline.parser import parse_html
+    from pipeline.extractor import extract_all
+    from pipeline.code_extractor import extract_code_examples
+    soup = parse_html()
+    extract_all(soup)
+    extract_code_examples(soup)
+
+
+def _stage_analyze():
+    from pipeline.analyzer import run_all_analytics
+    run_all_analytics()
+
+
+def _stage_visualize():
+    from pipeline.visualizer import plot_all
+    plot_all()
+
+
+def _stage_report():
+    from pipeline.reporter import generate_all
+    generate_all()
+
+
+def _stage_advanced():
+    """Run TF-IDF, readability, similarity - saves adv_ fields into summary_stats.json."""
+    try:
+        import json
+        from pipeline.advanced.nlp_analyzer import compute_tfidf_keywords, compute_readability
+        from pipeline.advanced.similarity import top_similar_pairs
+        from shared.utils import load_sections, load_summary_stats
+        from shared.constants import SUMMARY_STATS_JSON
+
+        sections = load_sections()
+        summary  = load_summary_stats()
+
+        tfidf  = compute_tfidf_keywords(sections, top_n=20)
+        scores = compute_readability(sections)
+        pairs  = top_similar_pairs(sections, top_n=10)
+
+        summary["adv_top_tfidf_keywords"]    = tfidf
+        summary["adv_avg_readability_score"] = round(float(scores.mean()), 2)
+        summary["adv_top_similar_pairs"]     = [
+            [a, b, round(s, 4)] for a, b, s in pairs
+        ]
+
+        SUMMARY_STATS_JSON.write_text(
+            json.dumps(summary, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+        print("[advanced] adv_ fields saved to summary_stats.json")
+    except Exception as e:
+        print(f"[advanced] Non-critical error (skipping): {e}")
+
+
+# ---------------------------------------------------------------------------
+# CLI run_all  (used by: python -m pipeline.pipeline)
+# ---------------------------------------------------------------------------
+
 def run_all(skip_fetch: bool = False) -> None:
-    """
-    Execute every pipeline stage in sequence.
-    Each stage prints a timestamped progress line — flush=True ensures
-    the WebSocket endpoint can stream lines in real time.
-    """
-    # Import here (not at module level) to avoid circular imports and so
-    # that each stage module is only loaded when the pipeline actually runs.
-    from pipeline import (
-        analyzer,
-        code_extractor,
-        collector,
-        extractor,
-        parser,
-        reporter,
-        visualizer,
-    )
-
-    # ── Stage definitions ──────────────────────────────────────────────────
-    def stage_collect():
-        if skip_fetch:
-            from shared.constants import RAW_HTML_PATH
-            if not RAW_HTML_PATH.exists():
-                raise FileNotFoundError(
-                    f"--skip-fetch requested but {RAW_HTML_PATH} does not exist. "
-                    "Run without --skip-fetch first."
-                )
-            logger.info("Skipping fetch — reusing %s", RAW_HTML_PATH.name)
-            return
-        collector.fetch_and_save()
-
-    def stage_parse():
-        # Just validate the HTML parses cleanly; soup is re-created per extraction stage.
-        soup = parser.parse_html()
-        logger.info("Parsed HTML — found %d tags", len(list(soup.find_all())))
-
-    def stage_extract():
-        soup = parser.parse_html()
-        extractor.extract_all(soup)
-        code_extractor.extract_code_examples(soup)
-
-    def stage_analyze():
-        analyzer.run_all_analytics()
-
-    def stage_visualize():
-        visualizer.plot_all()
-
-    def stage_report():
-        reporter.generate_all()
-
     stages = [
-        ("Collecting HTML",   stage_collect),
-        ("Parsing HTML",      stage_parse),
-        ("Extracting data",   stage_extract),
-        ("Running analytics", stage_analyze),
-        ("Generating charts", stage_visualize),
-        ("Generating report", stage_report),
+        ("Collecting HTML",    lambda: _stage_collect(skip_fetch)),
+        ("Parsing HTML",       _stage_parse),
+        ("Extracting data",    _stage_extract),
+        ("Running analytics",  _stage_analyze),
+        ("Generating charts",  _stage_visualize),
+        ("Generating report",  _stage_report),
+        ("Advanced analytics", _stage_advanced),
     ]
 
     total         = len(stages)
     overall_start = time.perf_counter()
-    print(f"[pipeline] Starting — {total} stages", flush=True)
+    print(f"[pipeline] Starting - {total} stages", flush=True)
 
     for i, (label, fn) in enumerate(stages, start=1):
         print(f"[pipeline] [{i}/{total}] {label}...", flush=True)

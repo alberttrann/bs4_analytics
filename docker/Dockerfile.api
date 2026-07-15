@@ -1,7 +1,6 @@
 # docker/Dockerfile.api
 # =====================
 # FastAPI backend container
-# Owner: Hung
 #
 # Build:   docker build -f docker/Dockerfile.api -t bs4-api .
 # Run:     docker run -p 8000:8000 -v $(pwd)/data:/app/data bs4-api

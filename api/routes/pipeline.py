@@ -1,8 +1,6 @@
 """
 api/routes/pipeline.py
-Owner: Hung (A)
-POST /pipeline/run  — trigger full pipeline as background task
-GET  /pipeline/status — check running state and last run time
+POST /pipeline/run, GET /pipeline/status
 """
 
 from __future__ import annotations
@@ -11,56 +9,68 @@ import asyncio
 import logging
 
 from fastapi import APIRouter, BackgroundTasks
-
-from shared.schemas import PipelineStatus
 from shared.utils import utc_now_iso
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
-# In-memory state — sufficient for single-server dev/demo use
 _state: dict = {
-    "running": False,
-    "last_run": None,
+    "running":                   False,
+    "current_stage":             "",
+    "stages_done":               0,
+    "total_stages":              7,
+    "last_run":                  None,
     "last_run_duration_seconds": None,
 }
 
 
-@router.post("/run", status_code=202, summary="Trigger the full ETL pipeline")
+@router.post("/run", status_code=202)
 def run_pipeline(background_tasks: BackgroundTasks):
-    """
-    Start the pipeline in a background task and return 202 immediately.
-    Monitor progress via GET /pipeline/status or connect to
-    WS /ws/pipeline-progress for live stdout streaming.
-    """
     if _state["running"]:
-        return {"status": "already_running", "message": "Pipeline is already in progress."}
-
+        return {"status": "already_running"}
     background_tasks.add_task(_run_pipeline_background)
     return {"status": "started"}
 
 
-@router.get("/status", response_model=PipelineStatus, summary="Pipeline run status")
+@router.get("/status")
 def get_status():
-    """Return whether the pipeline is currently running and when it last completed."""
-    return PipelineStatus(**_state)
+    return _state
 
 
 async def _run_pipeline_background() -> None:
-    """Async wrapper that runs pipeline.run_all() in a thread pool."""
     import time
-    from pipeline.pipeline import run_all
     from api.services.data_service import invalidate_cache
+    from pipeline.pipeline import (
+        _stage_collect, _stage_parse, _stage_extract,
+        _stage_analyze, _stage_visualize, _stage_report, _stage_advanced,
+    )
 
-    _state["running"] = True
+    stage_fns = [
+        ("Collecting HTML",    lambda: _stage_collect(False)),
+        ("Parsing HTML",       _stage_parse),
+        ("Extracting data",    _stage_extract),
+        ("Running analytics",  _stage_analyze),
+        ("Generating charts",  _stage_visualize),
+        ("Generating report",  _stage_report),
+        ("Advanced analytics", _stage_advanced),
+    ]
+
+    _state["running"]      = True
+    _state["stages_done"]  = 0
+    _state["current_stage"] = "Starting..."
     start = time.perf_counter()
+
     try:
-        await asyncio.to_thread(run_all)
-        invalidate_cache()   # force routes to reload fresh CSVs
-        logger.info("Pipeline completed successfully")
+        for label, fn in stage_fns:
+            _state["current_stage"] = label
+            await asyncio.to_thread(fn)
+            _state["stages_done"] += 1
+        invalidate_cache()
+        _state["current_stage"] = "Complete"
     except Exception as exc:
         logger.exception("Pipeline failed: %s", exc)
+        _state["current_stage"] = f"Error: {exc}"
     finally:
-        _state["running"] = False
-        _state["last_run"] = utc_now_iso()
-        _state["last_run_duration_seconds"] = round(time.perf_counter() - start, 2)
+        _state["running"]                    = False
+        _state["last_run"]                   = utc_now_iso()
+        _state["last_run_duration_seconds"]  = round(time.perf_counter() - start, 2)

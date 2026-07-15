@@ -2,8 +2,6 @@
 # =========================
 # CI pipeline: runs on every PR to main
 # Checks: pytest, ruff lint, mypy type checking
-#
-# Owner: Hung
 
 name: CI
 

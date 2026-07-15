@@ -1,7 +1,6 @@
 """
 pipeline/code_extractor.py
-Owner: Hung (A)
-Feature 5 — Code Example Extractor
+Feature 5 - Code Example Extractor
 
 Finds every <div class="highlight"> block in the parsed soup, extracts
 code text, counts non-empty lines, locates the parent section, and sets
@@ -68,14 +67,12 @@ def extract_code_examples(soup: BeautifulSoup) -> pd.DataFrame:
 
 # Helpers
 
-def _find_parent_section(tag: Tag) -> str:
-    """
-    Walk up the DOM from *tag* to find the nearest preceding heading (h1/h2/h3).
-    Returns the heading text, or 'Unknown' if none found.
-    """
-    for parent in tag.parents:
-        if isinstance(parent, Tag) and parent.name in ("h1", "h2", "h3"):
-            return parent.get_text(strip=True)
+def _find_parent_section(tag) -> str:
+    """Find the nearest preceding heading in document order."""
+    for heading in tag.find_all_previous(["h1", "h2", "h3"]):
+        title = heading.get_text(strip=True).replace("¶", "").strip()
+        if title:
+            return title
     return "Unknown"
 
 
